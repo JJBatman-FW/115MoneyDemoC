@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>預算審查觀測站 - 115年度總預算</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #e74c3c;
+            --bg-light: #f8f9fa;
+            
+            /* Dimensions */
+            --header-height: 60px; 
+            
+            /* Colors */
+            --color-remain: #2ecc71;
+            --color-freeze: #f1c40f;
+            --color-cut: #e74c3c;
+        }
+        
+        html, body { height: 100%; margin: 0; }
+        
+        body { 
+            font-family: 'Noto Sans TC', sans-serif; 
+            background-color: var(--bg-light); 
+            color: #333; 
+            display: flex; 
+            flex-direction: column; 
+            transition: background-color 0.5s;
+            overflow-x: hidden;
+            overflow-y: auto; 
+        }
+
+        /* ★★★ Dark Theme for Step 0 (Homepage) ★★★ */
+        body.step-0-active {
+            background-color: #0f2027;
+            background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            background-attachment: fixed;
+            overflow: hidden; /* Lock scroll ONLY on Step 0 */
+        }
+
+        /* ★★★ FORCE HIDE Header & Footer on Homepage ★★★ */
+        body.step-0-active .site-header,
+        body.step-0-active .site-footer {
+            display: none !important;
+        }
+
+        main { flex: 1; position: relative; }
+        h1, h2, h3, h5, .serif-font { font-family: 'Noto Serif TC', serif; }
+
+        /* HEADER */
+        .site-header { 
+            background-color: var(--primary-color); 
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            padding: 0 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            position: fixed; 
+            width: 100%; 
+            top: 0; 
+            z-index: 1000; 
+            transition: opacity 0.3s;
+        }
+        .site-brand { color: white; font-size: 1.3rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; cursor: pointer; }
+        .site-brand:hover { color: #ecf0f1; }
+
+        /* FOOTER */
+        .site-footer { 
+            background-color: #212529; 
+            color: #adb5bd; 
+            padding: 1.5rem 1rem; 
+            text-align: center; 
+            font-size: 0.9rem; 
+            z-index: 1000;
+            width: 100%;
+            line-height: 1.5; 
+            display: block; /* Visible by default (hidden by body class on step 0) */
+            position: relative;
+        }
+        .footer-content p { margin-bottom: 0.5rem; }
+        .footer-source { color: #6c757d; font-size: 0.8rem; }
+
+        /* Loading */
+        #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
+
+        /* =========================================
+           HERO SCROLLYTELLING STYLES (STEP 0)
+           ========================================= */
+        .hero-section { 
+            height: 100vh; 
+            width: 100%;
+            color: white; 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .hero-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px; pointer-events: none; }
+        
+        /* Slides */
+        .hero-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            pointer-events: none; 
+            transform: scale(0.98) translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .hero-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1) translateY(0);
+            z-index: 5;
+        }
+
+        .slide-content-wrapper {
+            padding: 20px 1.5rem; 
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Special padding for last slide */
+        #slide-5 .slide-content-wrapper {
+            padding-bottom: 140px; /* Space for footer */
+        }
+
+        /* Typography */
+        .slide-badge { font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 50px; margin-bottom: 20px; display: inline-block; backdrop-filter: blur(5px); }
+        .hero-title { font-size: 2.4rem; font-weight: 700; margin-bottom: 1.5rem; text-shadow: 0 4px 15px rgba(0,0,0,0.5); line-height: 1.3; }
+        .slide-text { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 750px; margin: 0 auto; }
+        .slide-highlight { color: #f1c40f; font-weight: bold; font-size: 1.1em; }
+        
+        /* Navigation Dots */
+        .hero-dots {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 20;
+        }
+        .hero-dot {
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .hero-dot.active { background: white; transform: scale(1.3); }
+        
+        .scroll-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
+            40% {transform: translateX(-50%) translateY(-10px);}
+            60% {transform: translateX(-50%) translateY(-5px);}
+        }
+
+        .chart-box {
+            width: 100%; max-width: 650px; height: 280px; 
+            background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 15px; display: flex; align-items: center; justify-content: center;
+            margin: 1.5rem auto; color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
+        }
+
+        .hero-quick-links { width: 100%; text-align: center; margin-top: 1.5rem; }
+        .hero-prompt { font-size: 1rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.8rem; font-weight: 500; letter-spacing: 0.5px; }
+        
+        .btn-quick-kw { 
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); 
+            color: white; margin: 0 6px 10px 6px; border-radius: 50px; 
+            padding: 10px 25px; backdrop-filter: blur(5px); 
+            transition: all 0.2s; font-size: 1.1rem; font-weight: bold; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .btn-quick-kw:hover { background: white; color: var(--primary-color); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        
+        .btn-refresh-keywords {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.7);
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-refresh-keywords:hover { background: rgba(255,255,255,0.15); color: white; border-color: white; }
+
+        .btn-full-budget { 
+            background: var(--accent-color); color: white; font-weight: bold; 
+            margin-top: 10px; border-radius: 50px; padding: 10px 30px; border: none; 
+            transition: all 0.2s; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
+
+        /* =========================================
+           INNER STEPS & COMPONENTS
+           ========================================= */
+        .step-section { 
+            display: none; 
+            padding-top: calc(var(--header-height) + 2rem); 
+            padding-bottom: 3rem; 
+            min-height: 100vh; 
+            animation: fadeIn 0.5s ease-out; 
+        }
+        .step-section.active { display: block; }
+        .main-content-container { padding-top: 90px; padding-bottom: 3rem; color: #333; }
+
+        .custom-breadcrumb { background: transparent; padding: 0; margin-bottom: 1rem; font-size: 0.85rem; }
+        .breadcrumb-item a { color: #6c757d; text-decoration: none; cursor: pointer; }
+        .breadcrumb-item.active { color: #adb5bd; }
+
+        .category-card { cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: none; border-radius: 16px; overflow: hidden; height: 100%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .category-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        .category-header { height: 140px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; font-weight: bold; position: relative; }
+        .cat-icon { font-size: 3rem; margin-bottom: 0.5rem; display: block; text-align: center; }
+
+        .btn-back { border: 1px solid #ced4da; color: #6c757d; background: white; font-size: 0.9rem; padding: 6px 16px; transition: all 0.2s; }
+        .btn-back:hover { background-color: #e9ecef; color: #333; border-color: #adb5bd; }
+
+        .keyword-btn { margin: 6px; border-radius: 20px; font-size: 1.1rem; padding: 10px 20px; border: 1px solid #dee2e6; color: #555; background: white; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); white-space: normal; max-width: 320px; text-align: left; display: inline-flex; align-items: center; }
+        .keyword-btn:hover { border-color: var(--primary-color); color: var(--primary-color); background: #f8f9fa; transform: translateY(-3px); box-shadow: 0 5px 10px rgba(0,0,0,0.15); }
+
+        .plan-block { cursor: pointer; transition: all 0.2s; border: 1px solid #e0e0e0; border-left: 4px solid transparent; position: relative; }
+        .plan-block:hover { transform: translateY(-3px); box-shadow: 0 8px 16px rgba(0,0,0,0.08) !important; border-left-color: var(--accent-color); }
+        .plan-amount { font-family: 'Courier New', monospace; font-weight: bold; color: var(--accent-color); font-size: 1.4rem; }
+        .tag-agency { display: inline-block; background-color: #6c757d; color: white; font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
+        .tag-status { display: inline-block; background-color: #17a2b8; color: white; font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
+
+        /* Detail Page Styles */
+        .detail-page-card { background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); padding: 40px; margin-bottom: 2rem; }
+        .detail-agency-tag, .modal-agency-tag { background-color: #95a5a6; color: white; padding: 6px 12px; font-size: 1rem; border-radius: 4px; margin-bottom: 1rem; display: inline-block; }
+        .detail-plan-title, .modal-plan-title { font-weight: 800; font-size: 2.2rem; color: #2c3e50; line-height: 1.3; margin-bottom: 1rem; }
+        .detail-total-amount, .modal-total-amount { font-family: 'Courier New', monospace; font-weight: bold; font-size: 1.8rem; color: #2c3e50; }
+
+        .outcome-container { position: relative; background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 30px; border-left: 5px solid #ced4da; }
+        .outcome-text { margin-bottom: 0; color: #555; line-height: 1.7; white-space: pre-line; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .outcome-text.collapsed { max-height: 4.8em; mask-image: linear-gradient(180deg, #000 60%, transparent); -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent); }
+        .outcome-text.expanded { max-height: none; mask-image: none; -webkit-mask-image: none; }
+        .outcome-toggle-btn { font-size: 0.9rem; text-decoration: none; color: var(--primary-color); margin-top: 10px; display: inline-block; cursor: pointer; font-weight: bold; }
+        .outcome-toggle-btn:hover { text-decoration: underline; }
+
+        .status-bar-container { height: 30px; border-radius: 6px; overflow: hidden; display: flex; background: #e9ecef; margin: 15px 0 5px 0; }
+        .status-seg { display: flex; align-items: center; justify-content: center; color: white; font-size: 0.85rem; font-weight: bold; white-space: nowrap; overflow: hidden; }
+        .status-seg.remain { background-color: var(--color-remain); }
+        .status-seg.freeze { background-color: var(--color-freeze); color: #333; }
+        .status-seg.cut { background-color: var(--color-cut); }
+        
+        .chart-wrapper { display: flex; justify-content: space-around; align-items: stretch; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #ddd; margin-top: 25px; }
+        .chart-col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; width: 25%; position: relative; }
+        .bar-group { display: flex; width: 100%; align-items: flex-end; justify-content: center; height: 100%; gap: 6px; }
+        .v-bar { width: 40%; border-radius: 4px 4px 0 0; transition: height 0.5s ease; position: relative; min-height: 2px; }
+        .v-bar.cut { background-color: var(--color-cut); opacity: 0.8; }
+        .v-bar.freeze { background-color: var(--color-freeze); opacity: 0.9; }
+        .bar-label { margin-top: 10px; font-size: 1rem; font-weight: bold; color: #555; text-align: center; }
+        .bar-val { position: absolute; top: -22px; font-size: 0.8rem; width: 100%; text-align: center; color: #444; font-weight: bold; }
+
+        .budget-bar-container { margin-top: 15px; background-color: #f1f1f1; border-radius: 4px; height: 12px; overflow: hidden; display: flex; }
+        .budget-bar-segment { height: 100%; }
+        .budget-legend { display: flex; flex-wrap: wrap; margin-top: 8px; font-size: 0.8rem; color: #666; }
+        .legend-item { display: flex; align-items: center; margin-right: 12px; margin-bottom: 4px; }
+        .legend-color { width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+
+        .scroll-table-container { max-height: 300px; overflow-y: auto; border: 1px solid #dee2e6; border-radius: 8px; margin-top: 20px; }
+        .table-custom thead th { position: sticky; top: 0; background: #f8f9fa; z-index: 1; padding: 12px; }
+        .table-custom td { font-size: 1rem; padding: 12px; }
+
+        .general-cut-alert { background-color: #ffe6e6; border-left: 5px solid var(--color-cut); padding: 15px; color: #c0392b; font-weight: bold; margin-top: 20px; border-radius: 6px; font-size: 1.1rem; }
+        .legis-label { font-size: 0.9rem; color: #7f8c8d; font-weight: bold; margin-bottom: 8px; text-transform: uppercase; }
+        .legis-tag { display: inline-block; padding: 6px 12px; border-radius: 4px; font-size: 0.95rem; margin-right: 8px; margin-bottom: 8px; border: 1px solid; }
+        .legis-tag.cut { border-color: var(--color-cut); color: var(--color-cut); background: #fff5f5; }
+        .legis-tag.freeze { border-color: var(--color-freeze); color: #b7950b; background: #fffcf0; }
+        .legend-row { display: flex; justify-content: center; gap: 15px; font-size: 0.9rem; color: #666; margin-bottom: 15px; }
+        .legend-dot { width: 12px; height: 12px; display: inline-block; margin-right: 5px; border-radius: 2px; }
+        
+        .step4-footer { border-top: 1px solid #dee2e6; margin-top: 3rem; padding-top: 2rem; text-align: center; }
+        .step4-footer h5 { margin-bottom: 1.5rem; color: #6c757d; font-weight: bold; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="step-0-active">
+
+    <div id="loading-overlay">
+        <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+        <h4 class="text-muted">正在連線至預算資料庫...</h4>
+    </div>
+
+    <header class="site-header">
+        <div class="container">
+            <a onclick="goToStep(0, true, 5)" class="site-brand">
+                <span style="font-size: 1.5rem; margin-right: 10px;">📊</span> 預算審查觀測站
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section id="step-0" class="hero-section step-section active" style="padding-top: 0;">
+            <div class="hero-bg-pattern"></div>
+            
+            <div class="hero-dots">
+                <div class="hero-dot active" onclick="jumpToSlide(0)"></div>
+                <div class="hero-dot" onclick="jumpToSlide(1)"></div>
+                <div class="hero-dot" onclick="jumpToSlide(2)"></div>
+                <div class="hero-dot" onclick="jumpToSlide(3)"></div>
+                <div class="hero-dot" onclick="jumpToSlide(4)"></div>
+                <div class="hero-dot" onclick="jumpToSlide(5)"></div>
+            </div>
+
+            <div class="hero-slide active" id="slide-0">
+                <div class="slide-content-wrapper">
+                    <div class="slide-badge">2026 政府預算專題</div>
+                    <h1 class="hero-title">115年度總預算案<br>進入立法院審查</h1>
+                    <p class="slide-text">
+                        審查結果將決定明年中央政府可以使用的經費。<br>
+                        114年度預算案從編列到審議過程朝野紛爭不斷，今年預算如何審查備受矚目，<br>
+                        我們整理主計總處與立法院資料，帶大家了解自己關心的政府預算如何被審查。
+                    </p>
+                    <div class="scroll-hint">↓ 滾動查看更多</div>
+                </div>
+            </div>
+
+            <div class="hero-slide" id="slide-1">
+                <div class="slide-content-wrapper">
+                    <h2 class="hero-title" style="font-size: 2rem;">不過在此之前，<br>先帶大家總覽今年總預算編列情形。</h2>
+                </div>
+            </div>
+
+            <div class="hero-slide" id="slide-2">
+                <div class="slide-content-wrapper">
+                    <p class="slide-text">
+                        115年度中央政府歲出編列 <span class="slide-highlight">3兆350億</span><br>
+                        這些經費支應了國家各項施政計畫。
+                    </p>
+                    <div class="chart-box">
+                        [總預算長條圖：3兆350億]
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-slide" id="slide-3">
+                <div class="slide-content-wrapper">
+                    <p class="slide-text">
+                        從政事別來看，這3兆多元被用於9大用途上。<br>
+                        其中比例最高的是 <span class="slide-highlight">社會福利8318億</span>，<br>
+                        其次是教育文化及國防。
+                    </p>
+                    <div class="chart-box">
+                        [政事別比例長條圖]
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-slide" id="slide-4">
+                <div class="slide-content-wrapper">
+                    <p class="slide-text">
+                        這9大用途可以再細分為32項中分類，及成千上百個工作計畫。<br>
+                        <br>
+                        龐大的數字背後，藏著許多你我關心的議題。<br>
+                        如果想知道特定議題的相關預算，該如何從眾多的資料中查詢呢？
+                    </p>
+                </div>
+            </div>
+
+            <div class="hero-slide" id="slide-5">
+                <div class="slide-content-wrapper">
+                    <p class="slide-text mb-4">
+                        為此我們整理了115年度中央政府總預算案，並隨機提供關鍵字，<br>
+                        讀者可以直接點選關鍵字，了解相關預算的編列與審查過程：
+                    </p>
+                    
+                    <button class="btn-refresh-keywords" onclick="renderRandomKeywords('hero-random-keywords')">
+                        🔄 換一組關鍵字
+                    </button>
+
+                    <div id="hero-random-keywords" class="d-flex justify-content-center flex-wrap mb-4"></div>
+
+                    <button class="btn btn-full-budget" onclick="goToStep(1)">看完整預算 →</button>
+                </div>
+            </div>
+        </section>
+
+        <div class="container main-content-container">
+            
+            <nav aria-label="breadcrumb" id="breadcrumb-nav" style="display:none;">
+                <ol class="breadcrumb custom-breadcrumb" id="breadcrumb-list"></ol>
+            </nav>
+
+            <section id="step-1" class="step-section">
+                <div class="mb-3 text-start">
+                    <button class="btn btn-back rounded-pill" onclick="goToStep(0, true, 5)">← 回上一頁</button>
+                </div>
+                <div class="text-start mb-5">
+                    <h2 class="display-6 fw-bold mb-2">請選擇支出類別</h2>
+                </div>
+                <div class="row g-4" id="category-container"></div>
+            </section>
+
+            <section id="step-2" class="step-section">
+                <div class="mb-3 text-start">
+                    <button class="btn btn-back rounded-pill" onclick="handleGlobalBack()">← 回上一頁</button>
+                </div>
+                <div class="text-start mb-4">
+                    <h2 class="mb-1">選擇關鍵字...</h2>
+                    <small class="text-muted">目前類別：<span id="selected-category-name" class="text-primary fw-bold"></span></small>
+                </div>
+                <div class="card border-0 shadow-sm p-4 bg-white rounded-4 text-center">
+                    <div id="keywords-container" class="d-flex flex-wrap gap-2 justify-content-center"></div>
+                    <div class="mt-4 text-muted fst-italic small">
+                        <span class="badge bg-warning text-dark me-1">數字</span> 表示關鍵字對應的工作計畫數量
+                    </div>
+                </div>
+            </section>
+
+            <section id="step-3" class="step-section">
+                <div class="mb-3 text-start">
+                    <button id="btn-back-step3" class="btn btn-back rounded-pill" onclick="handleGlobalBack()">← 回上一頁</button>
+                </div>
+                <div class="text-start mb-4">
+                    <h2 class="mb-1">關鍵字：「<span id="list-view-title" class="text-primary fw-bold"></span>」</h2>
+                    <small class="text-muted">共找到 <span id="list-count" class="fw-bold"></span> 筆資料</small>
+                </div>
+                <div id="plan-list-container" class="row g-3"></div>
+            </section>
+
+            <section id="step-4" class="step-section">
+                <div class="mb-3 text-start">
+                    <button class="btn btn-back rounded-pill" onclick="handleGlobalBack()">← 回上一頁</button>
+                </div>
+
+                <div class="detail-page-card">
+                    <div class="mb-4">
+                        <span class="detail-agency-tag" id="d-agency"></span>
+                        <h2 class="detail-plan-title" id="d-title"></h2>
+                        <div class="d-flex justify-content-between align-items-end border-bottom pb-3">
+                            <span class="text-muted">預算總額</span>
+                            <span class="detail-total-amount" id="d-amount"></span>
+                        </div>
+                    </div>
+
+                    <div class="outcome-container">
+                        <h6 class="fw-bold text-secondary mb-2">計畫內容與預期成果</h6>
+                        <p class="outcome-text collapsed" id="d-outcome-text"></p>
+                        <a id="d-outcome-toggle" class="outcome-toggle-btn" onclick="toggleOutcome()">▼ 展開完整內容</a>
+                    </div>
+
+                    <h6 class="fw-bold text-secondary">預算審查結果占比</h6>
+                    <div class="status-bar-container" id="d-status-bar"></div>
+                    <div class="d-flex justify-content-between small text-muted mb-4">
+                        <div class="d-flex align-items-center"><div style="width:10px;height:10px;background:var(--color-remain);margin-right:5px;"></div>通過/剩餘</div>
+                        <div class="d-flex align-items-center"><div style="width:10px;height:10px;background:var(--color-freeze);margin-right:5px;"></div>凍結</div>
+                        <div class="d-flex align-items-center"><div style="width:10px;height:10px;background:var(--color-cut);margin-right:5px;"></div>刪減</div>
+                    </div>
+
+                    <h6 class="fw-bold text-secondary mt-5">各階段審查刪凍變化</h6>
+                    <div class="legend-row">
+                        <div><span class="legend-dot" style="background:var(--color-cut)"></span>刪減</div>
+                        <div><span class="legend-dot" style="background:var(--color-freeze)"></span>凍結</div>
+                    </div>
+                    <div class="chart-wrapper" id="d-chart-wrapper"></div>
+
+                    <h6 class="fw-bold text-secondary mt-4">刪減凍結細目</h6>
+                    <div class="scroll-table-container">
+                        <table class="table table-hover table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col" width="30%">項目</th>
+                                    <th scope="col">說明 / 理由</th>
+                                </tr>
+                            </thead>
+                            <tbody id="d-details-table-body"></tbody>
+                        </table>
+                    </div>
+
+                    <div id="d-general-cut" class="general-cut-alert d-none"></div>
+
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="legis-label text-danger">提案刪減委員</div>
+                            <div id="d-legis-cut"></div>
+                        </div>
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <div class="legis-label text-warning">提案凍結委員</div>
+                            <div id="d-legis-freeze"></div>
+                        </div>
+                    </div>
+
+                    <div class="step4-footer">
+                        <h5>想了解其他預算？</h5>
+                        <button class="btn-refresh-keywords" style="border:1px solid #ccc; color:#666; background:transparent; margin-bottom:15px;" onclick="renderRandomKeywords('step4-random-keywords')">🔄 換一組</button>
+                        <div id="step4-random-keywords" class="d-flex justify-content-center flex-wrap mb-3"></div>
+                        <button class="btn btn-outline-primary rounded-pill px-4" onclick="goToStep(1)">看完整預算 →</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="mb-1 fw-bold">預算審查觀測站</p>
+                <p class="mb-0">資料來源：主計總處、立法院議事暨公報網</p>
+                <p class="footer-source">本網頁為新聞專題測試版，並非最終資料，僅供參考。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const PROXY_URL = 'https://corsproxy.io/?';
+        const TARGET_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS6ZFEMdgBFyC6O0Axmx7TvcckTzMoDCxrb5V_8gHJmyzBEXx-cLj6RtRWkyUUap-qiK_C2G-GwJFMJ/pub?gid=1922321201&single=true&output=csv';
+
+        const CATEGORY_CONFIG = {
+            "state": { name: "國務支出", icon: "🏛️", color: "#2c3e50", desc: "總統行使職權、國家安全會議運作。", total: "約 14 億元" },
+            "admin": { name: "行政支出", icon: "💼", color: "#2980b9", desc: "行政院及幕僚機關運作與政策規劃。", total: "約 69 億元" },
+            "legislative": { name: "立法支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 39 億元" },
+            "judiciary": { name: "司法支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 812 億元" },
+            "exam": { name: "考試支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 26 億元" },
+            "control": { name: "監察支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 30 億元" },
+            "civil": { name: "民政支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 726 億元" },
+            "police": { name: "警政支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 357 億元" },
+            "foreign": { name: "外交支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 415 億元" },
+            "finance": { name: "財務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 510 億元" },
+            "overseas": { name: "僑務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 26 億元" },
+            "defence": { name: "國防支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 5488 億元" },
+            "education": { name: "教育支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 3237 億元" },
+            "science": { name: "科學支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1817 億元" },
+            "culture": { name: "文化支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 513 億元" },
+            "agriculture": { name: "農業支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1669 億元" },
+            "industry": { name: "工業支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 522 億元" },
+            "transport": { name: "交通支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1622 億元" },
+            "service": { name: "其他經濟服務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 462 億元" },
+            "insurance": { name: "社會保險支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 6109 億元" },
+            "assistance": { name: "社會救助支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 88 億元" },
+            "welfare": { name: "福利服務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1416 億元" },
+            "employment": { name: "國民就業支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 20 億元" },
+            "medical": { name: "醫療保健支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 686 億元" },
+            "environment": { name: "環境保護支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 266 億元" },
+            "pension": { name: "退休撫卹給付支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1841 億元" },
+            "retirement": { name: "退休撫卹業務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 3.3 億元" },
+            "debt": { name: "債務付息支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 1059 億元" },
+            "repayment": { name: "還本付息事務支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 4.2 億元" },
+            "subsidy": { name: "專案補助支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 303 億元" },
+            "other": { name: "其他支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 81 億元" }
+        };
+
+        const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
+
+        let groupedData = {};
+        let allKeywords = [];
+        let historyStack = [];
+        let currentView = { step: 0 };
+        let currentSlide = 0;
+        let isScrolling = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initApp();
+            const heroSection = document.getElementById('step-0');
+            heroSection.addEventListener('wheel', handleHeroScroll, { passive: false });
+            let touchStartY = 0;
+            heroSection.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, {passive: false});
+            heroSection.addEventListener('touchmove', e => {
+                const touchEndY = e.touches[0].clientY;
+                if (!isScrolling) {
+                    const delta = touchStartY - touchEndY;
+                    if (Math.abs(delta) > 50) { 
+                        if (delta > 0 && currentSlide < 5) { // Max index 5
+                             changeSlide(currentSlide + 1);
+                        } else if (delta < 0 && currentSlide > 0) {
+                             changeSlide(currentSlide - 1);
+                        }
+                    }
+                }
+            }, {passive: false});
+        });
+
+        function initApp() {
+            if (TARGET_SHEET_URL && TARGET_SHEET_URL.length > 5) {
+                const finalUrl = PROXY_URL + encodeURIComponent(TARGET_SHEET_URL);
+                Papa.parse(finalUrl, {
+                    download: true, header: true,
+                    complete: function(results) {
+                        processData(results.data);
+                        renderCategories();
+                        renderRandomKeywords('hero-random-keywords');
+                        finishLoading();
+                    },
+                    error: function(err) {
+                        console.error("CSV Load Error", err);
+                        useDemoData();
+                    }
+                });
+            } else {
+                useDemoData();
+            }
+        }
+
+        function finishLoading() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.opacity = '0';
+            setTimeout(() => overlay.style.display = 'none', 500);
+        }
+
+        function useDemoData() {
+            // Demo data...
+            const demoRows = [
+                { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
+            ];
+            processData(demoRows);
+            renderCategories();
+            renderRandomKeywords('hero-random-keywords');
+            finishLoading();
+        }
+
+        function processData(rows) {
+            groupedData = {};
+            allKeywords = [];
+            for (let key in CATEGORY_CONFIG) groupedData[key] = {};
+            rows.forEach(row => {
+                if (!row.category) return;
+                if (!groupedData[row.category]) groupedData[row.category] = {};
+                const detailsArray = (row.details && typeof row.details === 'string') ? row.details.split(/[;；]+/) : [];
+                if (detailsArray.length === 0 && row.title) detailsArray.push(row.title);
+                let breakdown = [];
+                if (row.sub_breakdown) {
+                    const parts = row.sub_breakdown.split(/[;；]+/);
+                    parts.forEach(part => {
+                        const [name, valStr] = part.split(/[:：]/);
+                        if (name && valStr) {
+                            const val = parseInt(valStr.replace(/,/g, '').trim());
+                            if (!isNaN(val)) breakdown.push({ name: name.trim(), value: val });
+                        }
+                    });
+                }
+                detailsArray.forEach(d => {
+                    const keyword = d.trim();
+                    if (!keyword) return;
+                    if (!allKeywords.includes(keyword)) allKeywords.push(keyword);
+                    if (!groupedData[row.category][keyword]) groupedData[row.category][keyword] = [];
+                    const planObj = {
+                        title: row.title,
+                        agency: row.agency,
+                        amount: row.amount,
+                        reviewStatus: row.review_status || '',
+                        outcome: row.outcome || '',
+                        breakdown: breakdown, 
+                        cutFrozenVal: row.cut_frozen_val || '0,0',
+                        reviewStats: row.review_stats || '0,0;0,0;0,0',
+                        detailsTable: row.details_table || '',
+                        generalCut: row.general_cut || '',
+                        legisCut: row.legis_cut || '',
+                        legisFreeze: row.legis_freeze || ''
+                    };
+                    const exists = groupedData[row.category][keyword].some(p => p.title === planObj.title && p.agency === planObj.agency);
+                    if (!exists) groupedData[row.category][keyword].push(planObj);
+                });
+            });
+        }
+
+        function getCategoryForKeyword(kw) {
+            for(let cat in groupedData) {
+                if(groupedData[cat][kw]) return cat;
+            }
+            return null;
+        }
+
+        // Scroll Handling
+        function handleHeroScroll(e) {
+            if (isScrolling) { e.preventDefault(); return; }
+            if (Math.abs(e.deltaY) < 50) return;
+            const delta = e.deltaY;
+            if (delta > 0) {
+                if (currentSlide < 5) { e.preventDefault(); changeSlide(currentSlide + 1); }
+            } else {
+                if (currentSlide > 0) { e.preventDefault(); changeSlide(currentSlide - 1); }
+            }
+        }
+
+        function changeSlide(index) {
+            if (index < 0 || index > 5) return;
+            isScrolling = true;
+            document.querySelectorAll('.hero-slide').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.hero-dot').forEach(el => el.classList.remove('active'));
+            document.getElementById(`slide-${index}`).classList.add('active');
+            document.querySelectorAll('.hero-dot')[index].classList.add('active');
+            currentSlide = index;
+            
+            // Footer visibility (Hidden on Step 0 generally)
+            const footer = document.querySelector('.site-footer');
+            // Logic: Always hidden on Step 0 slides to prevent overlap
+            // User can see footer on inner pages
+            if (currentView.step === 0) {
+                 footer.style.display = 'none';
+            }
+
+            setTimeout(() => { isScrolling = false; }, 1500);
+        }
+        function jumpToSlide(index) { changeSlide(index); }
+
+        // Nav Logic
+        function pushHistory() { historyStack.push(JSON.parse(JSON.stringify(currentView))); }
+        function handleGlobalBack() {
+            if (historyStack.length === 0) { goToStep(0, false); return; }
+            const prevState = historyStack.pop();
+            restoreState(prevState);
+        }
+        function restoreState(state) {
+            currentView = state;
+            if (state.step === 0) { goToStep(0, false); }
+            else if (state.step === 1) { goToStep(1, false); }
+            else if (state.step === 2) { selectCategory(state.catKey, false); }
+            else if (state.step === 3) { 
+                const plans = groupedData[state.catKey][state.kw];
+                renderStep3List(state.kw, plans, false, state.catKey); 
+            } else if (state.step === 4) { renderStep4(state.plan, false); }
+        }
+
+        // Layout Managers
+        function enterInnerPageMode() {
+            document.body.classList.remove('step-0-active');
+            document.querySelector('.site-header').style.display = 'flex';
+            const footer = document.querySelector('.site-footer');
+            footer.style.display = 'block';
+            footer.style.position = 'relative';
+        }
+        
+        function enterHeroPageMode(slideIndex = 0) {
+            document.body.classList.add('step-0-active');
+            document.querySelector('.site-header').style.display = 'none';
+            // Also hide footer explicitly
+            document.querySelector('.site-footer').style.display = 'none';
+            changeSlide(slideIndex); 
+        }
+
+        function goToStep(step, isPush = true, slideIndex = 0) {
+            if(isPush && document.querySelector('.step-section.active')) pushHistory();
+            currentView = { step: step };
+            
+            document.querySelectorAll('.step-section').forEach(el => {
+                el.classList.remove('active');
+                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
+            });
+            const target = document.getElementById(`step-${step}`);
+            if(target) {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('active'), 10);
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+            
+            if(step === 0) { 
+                enterHeroPageMode(slideIndex);
+            } else {
+                enterInnerPageMode();
+            }
+            updateBreadcrumbs();
+        }
+
+        function selectCategory(catKey, isPush = true) {
+            if (!groupedData[catKey]) { alert("無此類別資料"); return; }
+            if(isPush) pushHistory();
+            enterInnerPageMode();
+
+            currentView = { step: 2, catKey: catKey };
+            const config = CATEGORY_CONFIG[catKey];
+            document.getElementById('selected-category-name').innerText = config.name;
+            const container = document.getElementById('keywords-container');
+            container.innerHTML = ''; 
+            Object.keys(groupedData[catKey]).forEach(keyword => {
+                const plans = groupedData[catKey][keyword];
+                const count = plans.length;
+                const btn = document.createElement('button');
+                btn.className = `btn keyword-btn`;
+                let html = `${keyword} <span class="badge bg-warning text-dark ms-1 rounded-pill">${count}</span>`;
+                btn.innerHTML = html;
+                btn.onclick = () => renderStep3List(keyword, plans);
+                container.appendChild(btn);
+            });
+            switchSection(2);
+            updateBreadcrumbs();
+        }
+
+        function renderCategories() {
+            const container = document.getElementById('category-container');
+            if(!container) return;
+            container.innerHTML = '';
+            for (const [key, config] of Object.entries(CATEGORY_CONFIG)) {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 col-12';
+                col.innerHTML = `
+                    <div class="card category-card">
+                        <div class="category-header" style="background-color: ${config.color};">
+                            <div><div class="cat-icon">${config.icon}</div>${config.name}</div>
+                        </div>
+                        <div class="card-body p-4">
+                            <p class="card-text text-muted">${config.desc}</p>
+                            <hr>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">總預算</small>
+                                <span class="fw-bold text-dark">${config.total}</span>
+                            </div>
+                        </div>
+                    </div>`;
+                col.querySelector('.category-card').onclick = () => selectCategory(key);
+                container.appendChild(col);
+            }
+        }
+
+        function renderStep3List(keyword, plans, isPush = true, explicitCatKey = null) {
+            if(isPush) pushHistory();
+            enterInnerPageMode();
+
+            let catKey = explicitCatKey || currentView.catKey;
+            if(!catKey) catKey = getCategoryForKeyword(keyword);
+            currentView = { step: 3, catKey: catKey, kw: keyword };
+            
+            document.getElementById('list-view-title').innerText = keyword;
+            document.getElementById('list-count').innerText = plans.length;
+            
+            const backBtn = document.getElementById('btn-back-step3');
+            backBtn.innerText = '← 回上一頁';
+
+            const container = document.getElementById('plan-list-container');
+            container.innerHTML = '';
+            plans.forEach(plan => {
+                let chartHtml = ''; let legendHtml = '';
+                if (plan.breakdown && plan.breakdown.length > 0) {
+                    const totalVal = plan.breakdown.reduce((sum, item) => sum + item.value, 0);
+                    let bars = ''; let legends = '';
+                    plan.breakdown.forEach((item, idx) => {
+                        const percent = (item.value / totalVal) * 100;
+                        const color = CHART_COLORS[idx % CHART_COLORS.length];
+                        bars += `<div class="budget-bar-segment" style="width: ${percent}%; background-color: ${color};"></div>`;
+                        legends += `<div class="legend-item"><div class="legend-color" style="background-color: ${color};"></div><span>${item.name}</span></div>`;
+                    });
+                    chartHtml = `<div class="budget-bar-container" style="height:10px;">${bars}</div>`;
+                    legendHtml = `<div class="budget-legend">${legends}</div>`;
+                }
+                let statusHtml = plan.reviewStatus ? `<span class="tag-status">${plan.reviewStatus}</span>` : '';
+                const col = document.createElement('div');
+                col.className = 'col-md-6 col-lg-4'; 
+                col.innerHTML = `
+                    <div class="card shadow-sm h-100 plan-block">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="tag-agency">${plan.agency}</span>
+                                ${statusHtml}
+                            </div>
+                            <h5 class="card-title fw-bold mb-3">${plan.title}</h5>
+                            <div class="d-flex justify-content-end align-items-center mb-2">
+                                <small class="text-muted me-2">預算金額</small>
+                                <span class="plan-amount">${plan.amount}</span>
+                            </div>
+                            ${chartHtml} ${legendHtml}
+                        </div>
+                    </div>
+                `;
+                col.querySelector('.plan-block').onclick = () => renderStep4(plan);
+                container.appendChild(col);
+            });
+            switchSection(3);
+            updateBreadcrumbs();
+        }
+
+        function renderStep4(plan, isPush = true) {
+            if(isPush) pushHistory();
+            enterInnerPageMode();
+
+            currentView = { step: 4, catKey: currentView.catKey, kw: currentView.kw, plan: plan };
+            
+            document.getElementById('d-agency').innerText = plan.agency;
+            document.getElementById('d-title').innerText = plan.title;
+            document.getElementById('d-amount').innerText = plan.amount;
+            
+            const outcomeText = document.getElementById('d-outcome-text');
+            const outcomeToggle = document.getElementById('d-outcome-toggle');
+            outcomeText.classList.remove('expanded');
+            outcomeText.classList.add('collapsed');
+            outcomeToggle.innerText = '▼ 展開完整內容';
+            
+            if (plan.outcome && plan.outcome.length > 0) {
+                outcomeText.innerText = plan.outcome;
+                if(plan.outcome.length < 60) {
+                    outcomeToggle.style.display = 'none';
+                    outcomeText.classList.remove('collapsed');
+                } else {
+                    outcomeToggle.style.display = 'inline-block';
+                }
+            } else {
+                outcomeText.innerText = "尚無詳細計畫內容。";
+                outcomeToggle.style.display = 'none';
+                outcomeText.classList.remove('collapsed');
+            }
+            
+            const cfVals = plan.cutFrozenVal.split(/[,，]/).map(s => parseInt(s.trim()) || 0);
+            const cutVal = cfVals[0] || 0; const freezeVal = cfVals[1] || 0;
+            let totalVal = parseInt(plan.amount.replace(/[^0-9]/g, ''));
+            if(plan.amount.includes('億')) totalVal *= 100000000;
+            else if(plan.amount.includes('萬')) totalVal *= 10000;
+            else totalVal = cutVal + freezeVal + 100000; 
+            const cutPct = Math.min((cutVal / totalVal) * 100, 100);
+            const freezePct = Math.min((freezeVal / totalVal) * 100, 100);
+            const remainPct = Math.max(0, 100 - cutPct - freezePct);
+            const barContainer = document.getElementById('d-status-bar');
+            barContainer.innerHTML = `
+                <div class="status-seg remain" style="width: ${remainPct}%">${remainPct > 10 ? remainPct.toFixed(1)+'%' : ''}</div>
+                <div class="status-seg freeze" style="width: ${freezePct}%">${freezePct > 5 ? '凍'+freezePct.toFixed(1)+'%' : ''}</div>
+                <div class="status-seg cut" style="width: ${cutPct}%">${cutPct > 5 ? '刪'+cutPct.toFixed(1)+'%' : ''}</div>
+            `;
+
+            const stages = plan.reviewStats.split(/[;；]/);
+            const stageNames = ['委員會', '黨團協商', '院會'];
+            const chartWrapper = document.getElementById('d-chart-wrapper');
+            chartWrapper.innerHTML = '';
+            let maxVal = 1;
+            stages.forEach(s => {
+                const parts = s.split(/[,，]/).map(v=>parseInt(v)||0);
+                if(parts[0] > maxVal) maxVal = parts[0];
+                if(parts[1] > maxVal) maxVal = parts[1];
+            });
+            stages.forEach((s, idx) => {
+                if(idx > 2) return;
+                const parts = s.split(/[,，]/).map(v=>parseInt(v)||0); 
+                const cVal = parts[0];
+                const fVal = parts[1];
+                const cH = (cVal / maxVal) * 100;
+                const fH = (fVal / maxVal) * 100; 
+                const col = document.createElement('div');
+                col.className = 'chart-col';
+                col.innerHTML = `
+                    <div class="bar-group">
+                        <div class="v-bar cut" style="height:${cH}%">${cH > 5 ? `<span class="bar-val">${cVal}</span>` : ''}</div>
+                        <div class="v-bar freeze" style="height:${fH}%">${fH > 5 ? `<span class="bar-val">${fVal}</span>` : ''}</div>
+                    </div>
+                    <div class="bar-label">${stageNames[idx]}</div>
+                `;
+                chartWrapper.appendChild(col);
+            });
+
+            const tbody = document.getElementById('d-details-table-body');
+            tbody.innerHTML = '';
+            const detailRows = plan.detailsTable.split(/[;；]/);
+            detailRows.forEach(rowStr => {
+                if(!rowStr.trim()) return;
+                const cols = rowStr.split(/[|｜]/);
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td class="fw-bold text-primary">${cols[0]}</td><td>${cols[1] || ''}</td>`;
+                tbody.appendChild(tr);
+            });
+
+            const genCutDiv = document.getElementById('d-general-cut');
+            if(plan.generalCut) {
+                genCutDiv.innerText = plan.generalCut;
+                genCutDiv.classList.remove('d-none');
+            } else {
+                genCutDiv.classList.add('d-none');
+            }
+
+            const renderTags = (containerId, str, cssClass) => {
+                const container = document.getElementById(containerId);
+                container.innerHTML = '';
+                if(!str) { container.innerHTML = '<span class="text-muted small">無</span>'; return; }
+                const names = str.split(/[,，、]/);
+                names.forEach(n => {
+                    if(!n.trim()) return;
+                    const tag = document.createElement('span');
+                    tag.className = `legis-tag ${cssClass}`;
+                    tag.innerText = n.trim();
+                    container.appendChild(tag);
+                });
+            };
+            renderTags('d-legis-cut', plan.legisCut, 'cut');
+            renderTags('d-legis-freeze', plan.legisFreeze, 'freeze');
+            
+            renderRandomKeywords('step4-random-keywords');
+            switchSection(4);
+            updateBreadcrumbs();
+        }
+
+        function renderRandomKeywords(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (allKeywords.length === 0) return;
+            const shuffled = allKeywords.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+            selected.forEach(kw => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-quick-kw'; 
+                if(containerId === 'step4-random-keywords') btn.className = 'btn btn-outline-secondary rounded-pill me-2 mb-2';
+                btn.innerText = kw;
+                const targetCat = getCategoryForKeyword(kw);
+                btn.onclick = () => {
+                    if (targetCat) {
+                        const targetPlans = groupedData[targetCat][kw];
+                        renderStep3List(kw, targetPlans, true, targetCat); 
+                    } else { alert("無法找到此關鍵字"); }
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        function switchSection(stepNum) {
+            document.querySelectorAll('.step-section').forEach(el => {
+                el.classList.remove('active');
+                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
+            });
+            const target = document.getElementById(`step-${stepNum}`);
+            if(target) {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('active'), 10);
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        function toggleOutcome() {
+            const text = document.getElementById('d-outcome-text');
+            const btn = document.getElementById('d-outcome-toggle');
+            if (text.classList.contains('collapsed')) {
+                text.classList.remove('collapsed');
+                text.classList.add('expanded');
+                btn.innerText = '▲ 收合內容';
+            } else {
+                text.classList.remove('expanded');
+                text.classList.add('collapsed');
+                btn.innerText = '▼ 展開完整內容';
+            }
+        }
+
+        function updateBreadcrumbs() {
+            const nav = document.getElementById('breadcrumb-nav');
+            const list = document.getElementById('breadcrumb-list');
+            list.innerHTML = '';
+            if(currentView.step === 0) { nav.style.display = 'none'; return; }
+            nav.style.display = 'block';
+            
+            let homeLi = document.createElement('li');
+            homeLi.className = 'breadcrumb-item';
+            // ★★★ Breadcrumb Home link goes to last slide ★★★
+            homeLi.innerHTML = '<a onclick="goToStep(0, true, 5)">首頁</a>';
+            list.appendChild(homeLi);
+            
+            if(currentView.step >= 1) {
+                let catLi = document.createElement('li');
+                catLi.className = 'breadcrumb-item';
+                if(currentView.step === 1) { catLi.classList.add('active'); catLi.innerText = '選擇類別'; }
+                else { 
+                    const catName = (currentView.catKey && CATEGORY_CONFIG[currentView.catKey]) ? CATEGORY_CONFIG[currentView.catKey].name : '類別';
+                    catLi.innerHTML = `<a onclick="goToStep(1)">${catName}</a>`; 
+                }
+                list.appendChild(catLi);
+            }
+            
+            if(currentView.step >= 2) {
+                let kwLi = document.createElement('li');
+                kwLi.className = 'breadcrumb-item';
+                if(currentView.step === 2) { kwLi.classList.add('active'); kwLi.innerText = '選擇關鍵字'; }
+                else { 
+                    kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; 
+                }
+                list.appendChild(kwLi);
+            }
+            
+            if(currentView.step >= 3) {
+                let listLi = document.createElement('li');
+                listLi.className = 'breadcrumb-item';
+                if(currentView.step === 3) { listLi.classList.add('active'); listLi.innerText = '計畫清單'; }
+                else { 
+                    listLi.innerHTML = `<a onclick="renderStep3List('${currentView.kw}', groupedData['${currentView.catKey}']['${currentView.kw}'], true, '${currentView.catKey}')">計畫清單</a>`;
+                }
+                list.appendChild(listLi);
+            }
+
+            if(currentView.step === 4) {
+                let detailLi = document.createElement('li');
+                detailLi.className = 'breadcrumb-item active';
+                detailLi.innerText = '詳細內容';
+                list.appendChild(detailLi);
+            }
+        }
+    </script>
+</body>
+</html>
