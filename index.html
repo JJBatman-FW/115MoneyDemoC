@@ -127,20 +127,28 @@
             z-index: 5;
         }
 
+        /* ★★★ Content Wrapper with INCREASED Top Padding ★★★ */
         .slide-content-wrapper {
-            padding: 20px 1.5rem; 
+            /* Increased top padding to prevent text from touching top edge */
+            padding-top: 120px; 
+            padding-bottom: 40px;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
             text-align: center;
             max-width: 900px;
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: center; /* Keeps content roughly centered vertically */
             height: 100%;
             box-sizing: border-box;
         }
 
-        #slide-5 .slide-content-wrapper { padding-bottom: 140px; }
+        /* Special padding for the last slide to avoid Footer overlap logic if needed (though footer is hidden now) */
+        #slide-5 .slide-content-wrapper {
+            padding-bottom: 140px; 
+        }
 
         /* Typography */
         .slide-badge { font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 50px; margin-bottom: 20px; display: inline-block; backdrop-filter: blur(5px); }
@@ -183,11 +191,14 @@
             60% {transform: translateX(-50%) translateY(-5px);}
         }
 
+        /* ★★★ Chart Placeholders (Added Margin) ★★★ */
         .chart-box {
             width: 100%; max-width: 650px; height: 280px; 
             background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2);
             border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            margin: 1.5rem auto; color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
+            /* Increased top margin for spacing */
+            margin: 3rem auto 2rem auto; 
+            color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
         }
 
         .hero-quick-links { width: 100%; text-align: center; margin-top: 1.5rem; }
@@ -223,51 +234,49 @@
         }
         .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
 
-        /* ★★★ Bill Chart Styles (Fixed Tooltip) ★★★ */
-        .comp-chart-wrapper { width: 100%; max-width: 750px; margin: 1.5rem auto; text-align: center; }
+        /* ★★★ Bill Chart Wrapper (Increased Margin for Tooltip Space) ★★★ */
+        .comp-chart-wrapper { 
+            width: 100%; 
+            max-width: 750px; 
+            /* Large top margin creates buffer for tooltip not to overlap text */
+            margin: 5rem auto 2rem auto; 
+            text-align: center; 
+        }
         
         .comp-bar { 
             width: 100%; 
             height: 320px; 
             display: flex; 
-            /* Removed overflow:hidden to show tooltips */
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            
-            /* Fallback color */
             background-color: #88b08b; 
-            /* ★★★ CHANGE THIS URL TO YOUR LOCAL FILE IF NEEDED ★★★ */
             background-image: url('Rectangle.png'); 
-            
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
             cursor: help;
-            border-radius: 12px; /* Border radius on container */
+            border-radius: 12px; 
         }
         
         .comp-segment { 
             height: 100%; 
             transition: all 0.2s; 
             position: relative;
-            /* Semi-transparent to show bill */
             opacity: 0.7; 
         }
         
-        /* Rounded corners for first and last segments to match container */
         .comp-segment:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
 
         .comp-segment:hover { 
-            opacity: 0.9; /* Brighter on hover */
+            opacity: 0.9; 
             z-index: 2;
         }
 
-        /* Tooltip styling */
         .comp-segment::after {
             content: attr(data-tooltip);
             position: absolute; 
-            bottom: 110%; /* Position above */
+            bottom: 110%; 
             left: 50%; 
             transform: translateX(-50%);
             background: rgba(0,0,0,0.9); 
@@ -393,7 +402,7 @@
 
     <header class="site-header">
         <div class="container">
-            <a onclick="goToStep(0, true, 5)" class="site-brand">
+            <a onclick="goToStep(0)" class="site-brand">
                 <span style="font-size: 1.5rem; margin-right: 10px;">📊</span> 預算審查觀測站
             </a>
         </div>
@@ -652,6 +661,8 @@
             "other": { name: "其他支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 81 億元" }
         };
 
+        const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
+
         // Data for the homepage chart - updated colors to include transparency for bill effect
         const budgetComposition = [
             { name: "社會福利", value: 8318, trend: "▲", color: "rgba(231, 76, 60, 0.8)" },
@@ -664,8 +675,6 @@
             { name: "補助及其他", value: 504, trend: "▼", color: "rgba(26, 188, 156, 0.8)" },
             { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(46, 204, 113, 0.8)" }
         ];
-
-        const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
         let groupedData = {};
         let allKeywords = [];
@@ -694,6 +703,7 @@
         });
 
         function initApp() {
+            // SAFE CHECK
             if (typeof Papa === 'undefined') {
                 console.error("PapaParse library failed to load. Switching to Demo Data.");
                 useDemoData();
@@ -879,12 +889,10 @@
                 setTimeout(() => target.classList.add('active'), 10);
             }
             
-            // Scroll top for inner pages
             if(step !== 0) window.scrollTo({top: 0, behavior: 'auto'});
 
             if(step === 0) { enterHeroPageMode(slideIndex); }
             else { enterInnerPageMode(); }
-            
             updateBreadcrumbs();
         }
 
@@ -1116,6 +1124,7 @@
                 btn.onclick = () => {
                     if (targetCat) {
                         const targetPlans = groupedData[targetCat][kw];
+                        // ★★★ Fix: Pass targetCat explicitly ★★★
                         renderStep3List(kw, targetPlans, true, targetCat); 
                     } else { alert("無法找到此關鍵字"); }
                 };
@@ -1158,7 +1167,8 @@
             
             let homeLi = document.createElement('li');
             homeLi.className = 'breadcrumb-item';
-            homeLi.innerHTML = '<a onclick="goToStep(0)">首頁</a>';
+            // ★★★ Breadcrumb Home link goes to last slide ★★★
+            homeLi.innerHTML = '<a onclick="goToStep(0, true, 5)">首頁</a>';
             list.appendChild(homeLi);
             
             if(currentView.step >= 1) {
@@ -1171,14 +1181,17 @@
                 }
                 list.appendChild(catLi);
             }
-            // ... (Rest of breadcrumb logic)
+            
             if(currentView.step >= 2) {
                 let kwLi = document.createElement('li');
                 kwLi.className = 'breadcrumb-item';
                 if(currentView.step === 2) { kwLi.classList.add('active'); kwLi.innerText = '選擇關鍵字'; }
-                else { kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; }
+                else { 
+                    kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; 
+                }
                 list.appendChild(kwLi);
             }
+            
             if(currentView.step >= 3) {
                 let listLi = document.createElement('li');
                 listLi.className = 'breadcrumb-item';
@@ -1188,6 +1201,7 @@
                 }
                 list.appendChild(listLi);
             }
+
             if(currentView.step === 4) {
                 let detailLi = document.createElement('li');
                 detailLi.className = 'breadcrumb-item active';
