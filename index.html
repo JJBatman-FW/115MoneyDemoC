@@ -38,7 +38,7 @@
             overflow-y: auto; 
         }
 
-        /* Dark Theme for Step 0 (Homepage) */
+        /* ★★★ Dark Theme for Step 0 (Homepage) ★★★ */
         body.step-0-active {
             background-color: #0f2027;
             background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
@@ -46,7 +46,7 @@
             overflow: hidden; /* Lock scroll ONLY on Step 0 */
         }
 
-        /* FORCE HIDE Header & Footer on Homepage */
+        /* ★★★ FORCE HIDE Header & Footer on Homepage ★★★ */
         body.step-0-active .site-header,
         body.step-0-active .site-footer {
             display: none !important;
@@ -91,7 +91,9 @@
         /* Loading */
         #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
 
-        /* HERO SCROLLYTELLING STYLES (STEP 0) */
+        /* =========================================
+           HERO SCROLLYTELLING STYLES (STEP 0)
+           ========================================= */
         .hero-section { 
             height: 100vh; 
             width: 100%;
@@ -188,7 +190,6 @@
             margin: 1.5rem auto; color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
         }
 
-        /* Hero Quick Links */
         .hero-quick-links { width: 100%; text-align: center; margin-top: 1.5rem; }
         .hero-prompt { font-size: 1rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.8rem; font-weight: 500; letter-spacing: 0.5px; }
         
@@ -222,6 +223,81 @@
         }
         .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
 
+        /* ★★★ Bill Chart Styles (Fixed Tooltip) ★★★ */
+        .comp-chart-wrapper { width: 100%; max-width: 750px; margin: 1.5rem auto; text-align: center; }
+        
+        .comp-bar { 
+            width: 100%; 
+            height: 320px; 
+            display: flex; 
+            /* Removed overflow:hidden to show tooltips */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            
+            /* Fallback color */
+            background-color: #88b08b; 
+            /* ★★★ CHANGE THIS URL TO YOUR LOCAL FILE IF NEEDED ★★★ */
+            background-image: url('Rectangle.png'); 
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+            cursor: help;
+            border-radius: 12px; /* Border radius on container */
+        }
+        
+        .comp-segment { 
+            height: 100%; 
+            transition: all 0.2s; 
+            position: relative;
+            /* Semi-transparent to show bill */
+            opacity: 0.7; 
+        }
+        
+        /* Rounded corners for first and last segments to match container */
+        .comp-segment:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
+        .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+
+        .comp-segment:hover { 
+            opacity: 0.9; /* Brighter on hover */
+            z-index: 2;
+        }
+
+        /* Tooltip styling */
+        .comp-segment::after {
+            content: attr(data-tooltip);
+            position: absolute; 
+            bottom: 110%; /* Position above */
+            left: 50%; 
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9); 
+            color: #fff; 
+            padding: 8px 12px;
+            border-radius: 6px; 
+            font-size: 1rem; 
+            font-weight: bold;
+            white-space: nowrap;
+            pointer-events: none; 
+            opacity: 0;
+            transition: opacity 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            z-index: 100;
+            border-bottom: 3px solid var(--accent-color);
+        }
+        .comp-segment:hover::after { opacity: 1; }
+        
+        .comp-legend { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px; }
+        .comp-legend-item { 
+            display: flex; align-items: center; 
+            font-size: 0.9rem; 
+            color: rgba(255,255,255,0.9); 
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .comp-legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+
         /* =========================================
            INNER STEPS & COMPONENTS
            ========================================= */
@@ -236,7 +312,7 @@
         .main-content-container { padding-top: 90px; padding-bottom: 3rem; color: #333; }
 
         .custom-breadcrumb { background: transparent; padding: 0; margin-bottom: 1rem; font-size: 0.85rem; }
-        .breadcrumb-item a { color: #6c757d; text-decoration: none; cursor: pointer; }
+        .breadcrumb-item a { color: #6c757d; text-decoration: none; }
         .breadcrumb-item.active { color: #adb5bd; }
 
         .category-card { cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: none; border-radius: 16px; overflow: hidden; height: 100%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
@@ -301,10 +377,10 @@
         .legis-tag.freeze { border-color: var(--color-freeze); color: #b7950b; background: #fffcf0; }
         .legend-row { display: flex; justify-content: center; gap: 15px; font-size: 0.9rem; color: #666; margin-bottom: 15px; }
         .legend-dot { width: 12px; height: 12px; display: inline-block; margin-right: 5px; border-radius: 2px; }
-
+        
         .step4-footer { border-top: 1px solid #dee2e6; margin-top: 3rem; padding-top: 2rem; text-align: center; }
         .step4-footer h5 { margin-bottom: 1.5rem; color: #6c757d; font-weight: bold; }
-        
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -374,8 +450,12 @@
                         其中比例最高的是 <span class="slide-highlight">社會福利8318億</span>，<br>
                         其次是教育文化及國防。
                     </p>
-                    <div class="chart-box">
-                        [政事別比例長條圖]
+                    
+                    <div class="comp-chart-wrapper">
+                        <div id="homepage-comp-bar" class="comp-bar">
+                            </div>
+                        <div id="homepage-comp-legend" class="comp-legend">
+                            </div>
                     </div>
                 </div>
             </div>
@@ -435,9 +515,7 @@
                 </div>
                 <div class="card border-0 shadow-sm p-4 bg-white rounded-4 text-center">
                     <div id="keywords-container" class="d-flex flex-wrap gap-2 justify-content-center"></div>
-                    <div class="mt-4 text-muted fst-italic small">
-                        <span class="badge bg-warning text-dark me-1">數字</span> 表示關鍵字對應的工作計畫數量
-                    </div>
+                    <div class="mt-4 text-muted fst-italic small"><span class="badge bg-warning text-dark me-1">數字</span> 表示關鍵字對應的工作計畫數量</div>
                 </div>
             </section>
 
@@ -574,6 +652,19 @@
             "other": { name: "其他支出", icon: "⚖️", color: "#27ae60", desc: "立法院運作、法案審查與國會外交。", total: "約 81 億元" }
         };
 
+        // Data for the homepage chart - updated colors to include transparency for bill effect
+        const budgetComposition = [
+            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(231, 76, 60, 0.8)" },
+            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(52, 152, 219, 0.8)" },
+            { name: "國防", value: 5488, trend: "▲", color: "rgba(44, 62, 80, 0.8)" },
+            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(241, 196, 15, 0.8)" },
+            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(155, 89, 182, 0.8)" },
+            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(230, 126, 34, 0.8)" },
+            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(149, 165, 166, 0.8)" },
+            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(26, 188, 156, 0.8)" },
+            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(46, 204, 113, 0.8)" }
+        ];
+
         const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
         let groupedData = {};
@@ -585,6 +676,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
+            renderHomepageChart();
             const heroSection = document.getElementById('step-0');
             heroSection.addEventListener('wheel', handleHeroScroll, { passive: false });
             let touchStartY = 0;
@@ -594,18 +686,14 @@
                 if (!isScrolling) {
                     const delta = touchStartY - touchEndY;
                     if (Math.abs(delta) > 50) { 
-                        if (delta > 0 && currentSlide < 5) { // Max index 5
-                             changeSlide(currentSlide + 1);
-                        } else if (delta < 0 && currentSlide > 0) {
-                             changeSlide(currentSlide - 1);
-                        }
+                        if (delta > 0 && currentSlide < 5) { changeSlide(currentSlide + 1); } 
+                        else if (delta < 0 && currentSlide > 0) { changeSlide(currentSlide - 1); }
                     }
                 }
             }, {passive: false});
         });
 
         function initApp() {
-            // ★★★ SAFE CHECK for PapaParse ★★★
             if (typeof Papa === 'undefined') {
                 console.error("PapaParse library failed to load. Switching to Demo Data.");
                 useDemoData();
@@ -622,14 +710,9 @@
                         renderRandomKeywords('hero-random-keywords');
                         finishLoading();
                     },
-                    error: function(err) {
-                        console.error("CSV Load Error", err);
-                        useDemoData();
-                    }
+                    error: function(err) { console.error("CSV Load Error", err); useDemoData(); }
                 });
-            } else {
-                useDemoData();
-            }
+            } else { useDemoData(); }
         }
 
         function finishLoading() {
@@ -639,6 +722,7 @@
         }
 
         function useDemoData() {
+            // Demo data...
             const demoRows = [
                 { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
             ];
@@ -649,8 +733,7 @@
         }
 
         function processData(rows) {
-            groupedData = {};
-            allKeywords = [];
+            groupedData = {}; allKeywords = [];
             for (let key in CATEGORY_CONFIG) groupedData[key] = {};
             rows.forEach(row => {
                 if (!row.category) return;
@@ -674,18 +757,11 @@
                     if (!allKeywords.includes(keyword)) allKeywords.push(keyword);
                     if (!groupedData[row.category][keyword]) groupedData[row.category][keyword] = [];
                     const planObj = {
-                        title: row.title,
-                        agency: row.agency,
-                        amount: row.amount,
-                        reviewStatus: row.review_status || '',
-                        outcome: row.outcome || '',
-                        breakdown: breakdown, 
-                        cutFrozenVal: row.cut_frozen_val || '0,0',
-                        reviewStats: row.review_stats || '0,0;0,0;0,0',
-                        detailsTable: row.details_table || '',
-                        generalCut: row.general_cut || '',
-                        legisCut: row.legis_cut || '',
-                        legisFreeze: row.legis_freeze || ''
+                        title: row.title, agency: row.agency, amount: row.amount,
+                        reviewStatus: row.review_status || '', outcome: row.outcome || '',
+                        breakdown: breakdown, cutFrozenVal: row.cut_frozen_val || '0,0',
+                        reviewStats: row.review_stats || '0,0;0,0;0,0', detailsTable: row.details_table || '',
+                        generalCut: row.general_cut || '', legisCut: row.legis_cut || '', legisFreeze: row.legis_freeze || ''
                     };
                     const exists = groupedData[row.category][keyword].some(p => p.title === planObj.title && p.agency === planObj.agency);
                     if (!exists) groupedData[row.category][keyword].push(planObj);
@@ -700,7 +776,35 @@
             return null;
         }
 
-        // Scroll Handling
+        // ★★★ NEW FUNCTION: Render Homepage Interactive Chart ★★★
+        function renderHomepageChart() {
+            const barContainer = document.getElementById('homepage-comp-bar');
+            const legendContainer = document.getElementById('homepage-comp-legend');
+            
+            if(!barContainer || !legendContainer) return;
+
+            const total = 30350; 
+            
+            let barsHtml = '';
+            let legendHtml = '';
+
+            budgetComposition.forEach(item => {
+                const pct = (item.value / total) * 100;
+                const tooltipText = `${item.name}: ${item.value}億 (${item.trend})`;
+                barsHtml += `<div class="comp-segment" style="width: ${pct}%; background-color: ${item.color};" data-tooltip="${tooltipText}"></div>`;
+                legendHtml += `
+                    <div class="comp-legend-item">
+                        <div class="comp-legend-color" style="background-color: ${item.color};"></div>
+                        <span>${item.name}</span>
+                    </div>
+                `;
+            });
+
+            barContainer.innerHTML = barsHtml;
+            legendContainer.innerHTML = legendHtml;
+        }
+
+        // SCROLL HANDLING
         function handleHeroScroll(e) {
             if (isScrolling) { e.preventDefault(); return; }
             if (Math.abs(e.deltaY) < 50) return;
@@ -720,6 +824,15 @@
             document.getElementById(`slide-${index}`).classList.add('active');
             document.querySelectorAll('.hero-dot')[index].classList.add('active');
             currentSlide = index;
+            
+            // Footer visibility (Hidden on Step 0 generally)
+            const footer = document.querySelector('.site-footer');
+            // Logic: Always hidden on Step 0 slides to prevent overlap
+            // User can see footer on inner pages
+            if (currentView.step === 0) {
+                 footer.style.display = 'none';
+            }
+
             setTimeout(() => { isScrolling = false; }, 1500);
         }
         function jumpToSlide(index) { changeSlide(index); }
@@ -742,10 +855,9 @@
             } else if (state.step === 4) { renderStep4(state.plan, false); }
         }
 
-        // ★★★ Layout Mode Switchers ★★★
+        // Layout Managers
         function enterInnerPageMode() {
             document.body.classList.remove('step-0-active');
-            // No need to manually set display:flex/block because CSS handles it via body class removal
         }
         
         function enterHeroPageMode(slideIndex = 0) {
@@ -757,11 +869,6 @@
             if(isPush && document.querySelector('.step-section.active')) pushHistory();
             currentView = { step: step };
             
-            // Scroll top for inner pages
-            if(step !== 0) {
-                 window.scrollTo({top: 0, behavior: 'auto'});
-            }
-
             document.querySelectorAll('.step-section').forEach(el => {
                 el.classList.remove('active');
                 setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
@@ -772,20 +879,18 @@
                 setTimeout(() => target.classList.add('active'), 10);
             }
             
-            // ★★★ Switch Modes based on Step ★★★
-            if(step === 0) { 
-                enterHeroPageMode(slideIndex);
-            } else {
-                enterInnerPageMode();
-            }
+            // Scroll top for inner pages
+            if(step !== 0) window.scrollTo({top: 0, behavior: 'auto'});
+
+            if(step === 0) { enterHeroPageMode(slideIndex); }
+            else { enterInnerPageMode(); }
+            
             updateBreadcrumbs();
         }
 
         function selectCategory(catKey, isPush = true) {
             if (!groupedData[catKey]) { alert("無此類別資料"); return; }
             if(isPush) pushHistory();
-            
-            // Ensure mode switch
             enterInnerPageMode();
 
             currentView = { step: 2, catKey: catKey };
@@ -835,8 +940,6 @@
 
         function renderStep3List(keyword, plans, isPush = true, explicitCatKey = null) {
             if(isPush) pushHistory();
-            
-            // Ensure mode switch
             enterInnerPageMode();
 
             let catKey = explicitCatKey || currentView.catKey;
@@ -894,8 +997,6 @@
 
         function renderStep4(plan, isPush = true) {
             if(isPush) pushHistory();
-            
-            // Ensure mode switch
             enterInnerPageMode();
 
             currentView = { step: 4, catKey: currentView.catKey, kw: currentView.kw, plan: plan };
@@ -903,11 +1004,10 @@
             document.getElementById('d-agency').innerText = plan.agency;
             document.getElementById('d-title').innerText = plan.title;
             document.getElementById('d-amount').innerText = plan.amount;
-            
+
             const outcomeText = document.getElementById('d-outcome-text');
             const outcomeToggle = document.getElementById('d-outcome-toggle');
-            outcomeText.classList.remove('expanded');
-            outcomeText.classList.add('collapsed');
+            outcomeText.classList.remove('expanded'); outcomeText.classList.add('collapsed');
             outcomeToggle.innerText = '▼ 展開完整內容';
             
             if (plan.outcome && plan.outcome.length > 0) {
@@ -915,9 +1015,7 @@
                 if(plan.outcome.length < 60) {
                     outcomeToggle.style.display = 'none';
                     outcomeText.classList.remove('collapsed');
-                } else {
-                    outcomeToggle.style.display = 'inline-block';
-                }
+                } else { outcomeToggle.style.display = 'inline-block'; }
             } else {
                 outcomeText.innerText = "尚無詳細計畫內容。";
                 outcomeToggle.style.display = 'none';
@@ -953,10 +1051,8 @@
             stages.forEach((s, idx) => {
                 if(idx > 2) return;
                 const parts = s.split(/[,，]/).map(v=>parseInt(v)||0); 
-                const cVal = parts[0];
-                const fVal = parts[1];
-                const cH = (cVal / maxVal) * 100;
-                const fH = (fVal / maxVal) * 100; 
+                const cVal = parts[0]; const fVal = parts[1];
+                const cH = (cVal / maxVal) * 100; const fH = (fVal / maxVal) * 100; 
                 const col = document.createElement('div');
                 col.className = 'chart-col';
                 col.innerHTML = `
@@ -981,12 +1077,8 @@
             });
 
             const genCutDiv = document.getElementById('d-general-cut');
-            if(plan.generalCut) {
-                genCutDiv.innerText = plan.generalCut;
-                genCutDiv.classList.remove('d-none');
-            } else {
-                genCutDiv.classList.add('d-none');
-            }
+            if(plan.generalCut) { genCutDiv.innerText = plan.generalCut; genCutDiv.classList.remove('d-none'); } 
+            else { genCutDiv.classList.add('d-none'); }
 
             const renderTags = (containerId, str, cssClass) => {
                 const container = document.getElementById(containerId);
@@ -1040,7 +1132,6 @@
             if(target) {
                 target.style.display = 'block';
                 setTimeout(() => target.classList.add('active'), 10);
-                window.scrollTo({top: 0, behavior: 'smooth'});
             }
         }
 
@@ -1080,17 +1171,14 @@
                 }
                 list.appendChild(catLi);
             }
-            
+            // ... (Rest of breadcrumb logic)
             if(currentView.step >= 2) {
                 let kwLi = document.createElement('li');
                 kwLi.className = 'breadcrumb-item';
                 if(currentView.step === 2) { kwLi.classList.add('active'); kwLi.innerText = '選擇關鍵字'; }
-                else { 
-                    kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; 
-                }
+                else { kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; }
                 list.appendChild(kwLi);
             }
-            
             if(currentView.step >= 3) {
                 let listLi = document.createElement('li');
                 listLi.className = 'breadcrumb-item';
@@ -1100,7 +1188,6 @@
                 }
                 list.appendChild(listLi);
             }
-
             if(currentView.step === 4) {
                 let detailLi = document.createElement('li');
                 detailLi.className = 'breadcrumb-item active';
