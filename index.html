@@ -239,9 +239,9 @@
             aspect-ratio: 2.15 / 1; 
             display: flex; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+            
             background-color: #88b08b; 
-            /* IMAGE URL */
-            background-image: url('Rectangle.png'); 
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/06/1000_New_Taiwan_Dollar_2004_Obverse.jpg'); 
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -260,7 +260,7 @@
         .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
         .comp-segment:hover { opacity: 0.9; z-index: 2; }
 
-        /* History Chart Styles */
+        /* ★★★ History Chart Styles ★★★ */
         .history-chart-wrapper {
             width: 100%;
             max-width: 800px;
@@ -506,10 +506,8 @@
                     </p>
                     
                     <div class="comp-chart-wrapper">
-                        <div id="homepage-comp-bar" class="comp-bar">
-                            </div>
-                        <div id="homepage-comp-legend" class="comp-legend">
-                            </div>
+                        <div id="homepage-comp-bar" class="comp-bar"></div>
+                        <div id="homepage-comp-legend" class="comp-legend"></div>
                     </div>
                 </div>
             </div>
@@ -708,24 +706,17 @@
 
         const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
-        let groupedData = {};
-        let allKeywords = [];
-        let historyStack = [];
-        let currentView = { step: 0 };
-        let currentSlide = 0;
-        let isScrolling = false;
-
-        // Data for the homepage chart - updated colors to include transparency for bill effect
+        // Data for the homepage chart
         const budgetComposition = [
-            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, // #6BBEBE
-            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, // #C37A64
-            { name: "國防", value: 5488, trend: "▲", color: "rgba(71, 120, 190, 0.9)" }, // #4778BE
-            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(131, 203, 118, 0.9)" }, // #83CB76
-            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(178, 185, 114, 0.9)" }, // #B2B972
-            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(166, 120, 177, 0.9)" }, // #A678B1
-            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(233, 180, 117, 0.9)" }, // #E9B475
-            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(72, 112, 136, 0.9)" }, // #487088
-            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(204, 155, 133, 0.9)" } // #CC9B85
+            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, 
+            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, 
+            { name: "國防", value: 5488, trend: "▲", color: "rgba(71, 120, 190, 0.9)" }, 
+            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(131, 203, 118, 0.9)" }, 
+            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(178, 185, 114, 0.9)" }, 
+            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(166, 120, 177, 0.9)" }, 
+            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(233, 180, 117, 0.9)" }, 
+            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(72, 112, 136, 0.9)" }, 
+            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(204, 155, 133, 0.9)" } 
         ];
         
         const budgetHistory = [
@@ -740,6 +731,13 @@
              { year: 114, amount: 3132468909 },
              { year: 115, amount: 3034974371 }
         ];
+
+        let groupedData = {};
+        let allKeywords = [];
+        let historyStack = [];
+        let currentView = { step: 0 };
+        let currentSlide = 0;
+        let isScrolling = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
@@ -759,6 +757,14 @@
                     }
                 }
             }, {passive: false});
+            
+            // Global Tooltip Hide on Click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.comp-bar') && !e.target.closest('.history-chart-wrapper')) {
+                    const tooltip = document.getElementById('floating-tooltip');
+                    if(tooltip) tooltip.style.display = 'none';
+                }
+            });
         });
 
         function initApp() {
@@ -795,7 +801,6 @@
         }
 
         function useDemoData() {
-            // Demo data...
             const demoRows = [
                 { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
             ];
@@ -849,60 +854,32 @@
             return null;
         }
 
-        // ★★★ Render History Chart (Slide 2) ★★★
-        function renderHistoryChart() {
-            const container = document.getElementById('budget-history-chart');
-            if(!container) return;
-            
-            let html = '';
-            const maxVal = Math.max(...budgetHistory.map(d => d.amount));
-            
-            const tooltipTexts = {
-                115: "3兆350億", 114: "3兆1325億", 113: "2兆8818億",
-                112: "2兆7191億", 111: "2兆2621億", 110: "2兆1615億",
-                109: "2兆1022億", 108: "2兆220億", 107: "1兆9918億",
-                106: "1兆9980億"
-            };
+        // ★★★ ALL FUNCTIONS MUST BE AT TOP LEVEL ★★★
 
-            const tooltip = document.getElementById('floating-tooltip');
-
-            budgetHistory.forEach(item => {
-                const heightPct = (item.amount / maxVal) * 100;
-                const isCurrent = item.year === 115;
-                const activeClass = isCurrent ? 'active' : '';
-                const tooltipText = `${item.year}年度 ${tooltipTexts[item.year]}`;
-
-                const group = document.createElement('div');
-                group.className = 'history-bar-group';
-                group.innerHTML = `
-                    <div class="history-bar ${activeClass}" style="height: ${heightPct}%;"></div>
-                    <div class="history-label">${item.year}</div>
-                `;
-                
-                group.addEventListener('mousemove', (e) => {
-                    tooltip.innerText = tooltipText;
-                    tooltip.style.display = 'block';
-                    
-                    const tooltipWidth = tooltip.offsetWidth;
-                    const windowWidth = window.innerWidth;
-                    let leftPos = e.clientX;
-                    
-                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
-                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
-
-                    tooltip.style.left = leftPos + 'px';
-                    tooltip.style.top = (e.clientY - 40) + 'px'; 
-                });
-                
-                group.addEventListener('mouseleave', () => {
-                    tooltip.style.display = 'none';
-                });
-
-                container.appendChild(group);
+        // 1. Render Random Keywords
+        function renderRandomKeywords(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (allKeywords.length === 0) return;
+            const shuffled = allKeywords.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+            selected.forEach(kw => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-quick-kw'; 
+                if(containerId === 'step4-random-keywords') btn.className = 'btn btn-outline-secondary rounded-pill me-2 mb-2';
+                btn.innerText = kw;
+                const targetCat = getCategoryForKeyword(kw);
+                btn.onclick = () => {
+                    if (targetCat) {
+                        const targetPlans = groupedData[targetCat][kw];
+                        renderStep3List(kw, targetPlans, true, targetCat); 
+                    } else { alert("無法找到此關鍵字"); }
+                };
+                container.appendChild(btn);
             });
         }
 
-        // ★★★ Render Homepage Interactive Chart (Slide 3) ★★★
+        // 2. Render Homepage Chart
         function renderHomepageChart() {
             const barContainer = document.getElementById('homepage-comp-bar');
             const legendContainer = document.getElementById('homepage-comp-legend');
@@ -917,7 +894,6 @@
             budgetComposition.forEach(item => {
                 const pct = (item.value / total) * 100;
                 const tooltipText = `${item.name}: ${item.value}億 (${item.trend})`;
-                // Use data-attribute to store text for JS
                 barsHtml += `<div class="comp-segment" style="width: ${pct}%; background-color: ${item.color};" data-tip="${tooltipText}"></div>`;
                 legendHtml += `
                     <div class="comp-legend-item">
@@ -936,14 +912,11 @@
                     const text = seg.getAttribute('data-tip');
                     tooltip.innerText = text;
                     tooltip.style.display = 'block';
-                    
                     const tooltipWidth = tooltip.offsetWidth;
                     const windowWidth = window.innerWidth;
                     let leftPos = e.clientX;
-                    
-                    if (leftPos + tooltipWidth/2 > windowWidth - 10) { leftPos = windowWidth - tooltipWidth/2 - 10; }
-                    if (leftPos - tooltipWidth/2 < 10) { leftPos = tooltipWidth/2 + 10; }
-
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
+                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
                     tooltip.style.left = leftPos + 'px';
                     tooltip.style.top = (e.clientY - 40) + 'px'; 
                 });
@@ -951,128 +924,48 @@
             });
         }
 
-        // SCROLL HANDLING
-        function handleHeroScroll(e) {
-            if (isScrolling) { e.preventDefault(); return; }
-            if (Math.abs(e.deltaY) < 50) return;
-            const delta = e.deltaY;
-            if (delta > 0) {
-                if (currentSlide < 5) { e.preventDefault(); changeSlide(currentSlide + 1); }
-            } else {
-                if (currentSlide > 0) { e.preventDefault(); changeSlide(currentSlide - 1); }
-            }
-        }
+        // 3. Render History Chart
+        function renderHistoryChart() {
+            const container = document.getElementById('budget-history-chart');
+            if(!container) return;
+            let html = '';
+            const maxVal = Math.max(...budgetHistory.map(d => d.amount));
+            const tooltipTexts = {
+                115: "3兆350億", 114: "3兆1325億", 113: "2兆8818億",
+                112: "2兆7191億", 111: "2兆2621億", 110: "2兆1615億",
+                109: "2兆1022億", 108: "2兆220億", 107: "1兆9918億",
+                106: "1兆9980億"
+            };
+            const tooltip = document.getElementById('floating-tooltip');
 
-        function changeSlide(index) {
-            if (index < 0 || index > 5) return;
-            isScrolling = true;
-            document.querySelectorAll('.hero-slide').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.hero-dot').forEach(el => el.classList.remove('active'));
-            document.getElementById(`slide-${index}`).classList.add('active');
-            document.querySelectorAll('.hero-dot')[index].classList.add('active');
-            currentSlide = index;
-            
-            // Footer visibility (Hidden on Step 0 generally)
-            const footer = document.querySelector('.site-footer');
-            // Logic: Always hidden on Step 0 slides to prevent overlap
-            // User can see footer on inner pages
-            if (currentView.step === 0) {
-                 footer.style.display = 'none';
-            }
-
-            setTimeout(() => { isScrolling = false; }, 1500);
-        }
-        function jumpToSlide(index) { changeSlide(index); }
-
-        // Nav Logic
-        function pushHistory() { historyStack.push(JSON.parse(JSON.stringify(currentView))); }
-        function handleGlobalBack() {
-            if (historyStack.length === 0) { goToStep(0, false); return; }
-            const prevState = historyStack.pop();
-            restoreState(prevState);
-        }
-        function restoreState(state) {
-            currentView = state;
-            if (state.step === 0) { 
-                // ★★★ Restore to specific slide index ★★★
-                const targetSlide = state.slideIndex !== undefined ? state.slideIndex : 0;
-                goToStep(0, false, targetSlide); 
-            }
-            else if (state.step === 1) { goToStep(1, false); }
-            else if (state.step === 2) { selectCategory(state.catKey, false); }
-            else if (state.step === 3) { 
-                const plans = groupedData[state.catKey][state.kw];
-                renderStep3List(state.kw, plans, false, state.catKey); 
-            } else if (state.step === 4) { renderStep4(state.plan, false); }
-        }
-
-        // Layout Managers
-        function enterInnerPageMode() {
-            document.body.classList.remove('step-0-active');
-            document.querySelector('.site-header').style.display = 'flex';
-            const footer = document.querySelector('.site-footer');
-            footer.style.display = 'block';
-            footer.style.position = 'relative';
-        }
-        
-        function enterHeroPageMode(slideIndex = 0) {
-            document.body.classList.add('step-0-active');
-            document.querySelector('.site-header').style.display = 'none';
-            document.querySelector('.site-footer').style.display = 'none';
-            changeSlide(slideIndex); 
-        }
-
-        function goToStep(step, isPush = true, slideIndex = 0) {
-            if(isPush) {
-                let stateToSave = JSON.parse(JSON.stringify(currentView));
-                if (currentView.step === 0) stateToSave.slideIndex = currentSlide;
-                historyStack.push(stateToSave);
-            }
-            
-            currentView = { step: step };
-            if(step === 0) currentView.slideIndex = slideIndex;
-
-            document.querySelectorAll('.step-section').forEach(el => {
-                el.classList.remove('active');
-                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
+            budgetHistory.forEach(item => {
+                const heightPct = (item.amount / maxVal) * 100;
+                const isCurrent = item.year === 115;
+                const activeClass = isCurrent ? 'active' : '';
+                const tooltipText = `${item.year}年度 ${tooltipTexts[item.year]}`;
+                const group = document.createElement('div');
+                group.className = 'history-bar-group';
+                group.innerHTML = `
+                    <div class="history-bar ${activeClass}" style="height: ${heightPct}%;"></div>
+                    <div class="history-label">${item.year}</div>
+                `;
+                group.addEventListener('mousemove', (e) => {
+                    tooltip.innerText = tooltipText;
+                    tooltip.style.display = 'block';
+                    const tooltipWidth = tooltip.offsetWidth;
+                    const windowWidth = window.innerWidth;
+                    let leftPos = e.clientX;
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
+                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
+                    tooltip.style.left = leftPos + 'px';
+                    tooltip.style.top = (e.clientY - 40) + 'px'; 
+                });
+                group.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+                container.appendChild(group);
             });
-            const target = document.getElementById(`step-${step}`);
-            if(target) {
-                target.style.display = 'block';
-                setTimeout(() => target.classList.add('active'), 10);
-            }
-            
-            if(step !== 0) window.scrollTo({top: 0, behavior: 'auto'});
-
-            if(step === 0) { enterHeroPageMode(slideIndex); }
-            else { enterInnerPageMode(); }
-            updateBreadcrumbs();
         }
 
-        function selectCategory(catKey, isPush = true) {
-            if (!groupedData[catKey]) { alert("無此類別資料"); return; }
-            if(isPush) pushHistory();
-            enterInnerPageMode();
-
-            currentView = { step: 2, catKey: catKey };
-            const config = CATEGORY_CONFIG[catKey];
-            document.getElementById('selected-category-name').innerText = config.name;
-            const container = document.getElementById('keywords-container');
-            container.innerHTML = ''; 
-            Object.keys(groupedData[catKey]).forEach(keyword => {
-                const plans = groupedData[catKey][keyword];
-                const count = plans.length;
-                const btn = document.createElement('button');
-                btn.className = `btn keyword-btn`;
-                let html = `${keyword} <span class="badge bg-warning text-dark ms-1 rounded-pill">${count}</span>`;
-                btn.innerHTML = html;
-                btn.onclick = () => renderStep3List(keyword, plans);
-                container.appendChild(btn);
-            });
-            switchSection(2);
-            updateBreadcrumbs();
-        }
-
+        // 4. Render Categories
         function renderCategories() {
             const container = document.getElementById('category-container');
             if(!container) return;
@@ -1098,21 +991,122 @@
                 container.appendChild(col);
             }
         }
+        
+        // 5. Helper: Hide Tooltip
+        function hideTooltip() {
+             const tooltip = document.getElementById('floating-tooltip');
+             if(tooltip) tooltip.style.display = 'none';
+        }
+
+        // 6. Scroll & Slide Logic
+        function handleHeroScroll(e) {
+            if (isScrolling) { e.preventDefault(); return; }
+            hideTooltip();
+            if (Math.abs(e.deltaY) < 50) return;
+            const delta = e.deltaY;
+            if (delta > 0) {
+                if (currentSlide < 5) { e.preventDefault(); changeSlide(currentSlide + 1); }
+            } else {
+                if (currentSlide > 0) { e.preventDefault(); changeSlide(currentSlide - 1); }
+            }
+        }
+
+        function changeSlide(index) {
+            if (index < 0 || index > 5) return;
+            hideTooltip();
+            isScrolling = true;
+            document.querySelectorAll('.hero-slide').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.hero-dot').forEach(el => el.classList.remove('active'));
+            document.getElementById(`slide-${index}`).classList.add('active');
+            document.querySelectorAll('.hero-dot')[index].classList.add('active');
+            currentSlide = index;
+            setTimeout(() => { isScrolling = false; }, 1500);
+        }
+        function jumpToSlide(index) { changeSlide(index); }
+
+        // 7. Navigation & State
+        function pushHistory() { historyStack.push(JSON.parse(JSON.stringify(currentView))); }
+        function handleGlobalBack() {
+            if (historyStack.length === 0) { goToStep(0, false); return; }
+            const prevState = historyStack.pop();
+            restoreState(prevState);
+        }
+        function restoreState(state) {
+            currentView = state;
+            if (state.step === 0) { 
+                const targetSlide = state.slideIndex !== undefined ? state.slideIndex : 0;
+                goToStep(0, false, targetSlide); 
+            }
+            else if (state.step === 1) { goToStep(1, false); }
+            else if (state.step === 2) { selectCategory(state.catKey, false); }
+            else if (state.step === 3) { 
+                const plans = groupedData[state.catKey][state.kw];
+                renderStep3List(state.kw, plans, false, state.catKey); 
+            } else if (state.step === 4) { renderStep4(state.plan, false); }
+        }
+
+        function enterInnerPageMode() { document.body.classList.remove('step-0-active'); }
+        function enterHeroPageMode(slideIndex = 0) { document.body.classList.add('step-0-active'); changeSlide(slideIndex); }
+
+        function goToStep(step, isPush = true, slideIndex = 0) {
+            if(isPush) {
+                let stateToSave = JSON.parse(JSON.stringify(currentView));
+                if (currentView.step === 0) stateToSave.slideIndex = currentSlide;
+                historyStack.push(stateToSave);
+            }
+            currentView = { step: step };
+            if(step === 0) currentView.slideIndex = slideIndex;
+
+            document.querySelectorAll('.step-section').forEach(el => {
+                el.classList.remove('active');
+                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
+            });
+            const target = document.getElementById(`step-${step}`);
+            if(target) {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('active'), 10);
+            }
+            if(step !== 0) window.scrollTo({top: 0, behavior: 'auto'});
+
+            if(step === 0) { enterHeroPageMode(slideIndex); }
+            else { enterInnerPageMode(); }
+            updateBreadcrumbs();
+        }
+
+        // 8. Step Renderers
+        function selectCategory(catKey, isPush = true) {
+            if (!groupedData[catKey]) { alert("無此類別資料"); return; }
+            if(isPush) pushHistory();
+            enterInnerPageMode();
+            currentView = { step: 2, catKey: catKey };
+            const config = CATEGORY_CONFIG[catKey];
+            document.getElementById('selected-category-name').innerText = config.name;
+            const container = document.getElementById('keywords-container');
+            container.innerHTML = ''; 
+            Object.keys(groupedData[catKey]).forEach(keyword => {
+                const plans = groupedData[catKey][keyword];
+                const count = plans.length;
+                const btn = document.createElement('button');
+                btn.className = `btn keyword-btn`;
+                let html = `${keyword} <span class="badge bg-warning text-dark ms-1 rounded-pill">${count}</span>`;
+                btn.innerHTML = html;
+                btn.onclick = () => renderStep3List(keyword, plans);
+                container.appendChild(btn);
+            });
+            switchSection(2);
+            updateBreadcrumbs();
+        }
 
         function renderStep3List(keyword, plans, isPush = true, explicitCatKey = null) {
             if(isPush) pushHistory();
             enterInnerPageMode();
-
             let catKey = explicitCatKey || currentView.catKey;
             if(!catKey) catKey = getCategoryForKeyword(keyword);
             currentView = { step: 3, catKey: catKey, kw: keyword };
-            
             document.getElementById('list-view-title').innerText = keyword;
             document.getElementById('list-count').innerText = plans.length;
-            
             const backBtn = document.getElementById('btn-back-step3');
             backBtn.innerText = '← 回上一頁';
-
             const container = document.getElementById('plan-list-container');
             container.innerHTML = '';
             plans.forEach(plan => {
@@ -1151,7 +1145,6 @@
                 col.querySelector('.plan-block').onclick = () => renderStep4(plan);
                 container.appendChild(col);
             });
-
             switchSection(3);
             updateBreadcrumbs();
         }
@@ -1159,18 +1152,14 @@
         function renderStep4(plan, isPush = true) {
             if(isPush) pushHistory();
             enterInnerPageMode();
-
             currentView = { step: 4, catKey: currentView.catKey, kw: currentView.kw, plan: plan };
-            
             document.getElementById('d-agency').innerText = plan.agency;
             document.getElementById('d-title').innerText = plan.title;
             document.getElementById('d-amount').innerText = plan.amount;
-
             const outcomeText = document.getElementById('d-outcome-text');
             const outcomeToggle = document.getElementById('d-outcome-toggle');
             outcomeText.classList.remove('expanded'); outcomeText.classList.add('collapsed');
             outcomeToggle.innerText = '▼ 展開完整內容';
-            
             if (plan.outcome && plan.outcome.length > 0) {
                 outcomeText.innerText = plan.outcome;
                 if(plan.outcome.length < 60) {
@@ -1182,7 +1171,6 @@
                 outcomeToggle.style.display = 'none';
                 outcomeText.classList.remove('collapsed');
             }
-            
             const cfVals = plan.cutFrozenVal.split(/[,，]/).map(s => parseInt(s.trim()) || 0);
             const cutVal = cfVals[0] || 0; const freezeVal = cfVals[1] || 0;
             let totalVal = parseInt(plan.amount.replace(/[^0-9]/g, ''));
@@ -1198,7 +1186,6 @@
                 <div class="status-seg freeze" style="width: ${freezePct}%">${freezePct > 5 ? '凍'+freezePct.toFixed(1)+'%' : ''}</div>
                 <div class="status-seg cut" style="width: ${cutPct}%">${cutPct > 5 ? '刪'+cutPct.toFixed(1)+'%' : ''}</div>
             `;
-
             const stages = plan.reviewStats.split(/[;；]/);
             const stageNames = ['委員會', '黨團協商', '院會'];
             const chartWrapper = document.getElementById('d-chart-wrapper');
@@ -1225,7 +1212,6 @@
                 `;
                 chartWrapper.appendChild(col);
             });
-
             const tbody = document.getElementById('d-details-table-body');
             tbody.innerHTML = '';
             const detailRows = plan.detailsTable.split(/[;；]/);
@@ -1236,11 +1222,9 @@
                 tr.innerHTML = `<td class="fw-bold text-primary">${cols[0]}</td><td>${cols[1] || ''}</td>`;
                 tbody.appendChild(tr);
             });
-
             const genCutDiv = document.getElementById('d-general-cut');
             if(plan.generalCut) { genCutDiv.innerText = plan.generalCut; genCutDiv.classList.remove('d-none'); } 
             else { genCutDiv.classList.add('d-none'); }
-
             const renderTags = (containerId, str, cssClass) => {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
@@ -1256,59 +1240,9 @@
             };
             renderTags('d-legis-cut', plan.legisCut, 'cut');
             renderTags('d-legis-freeze', plan.legisFreeze, 'freeze');
-            
             renderRandomKeywords('step4-random-keywords');
             switchSection(4);
             updateBreadcrumbs();
-        }
-
-        function renderRandomKeywords(containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            if (allKeywords.length === 0) return;
-            const shuffled = allKeywords.sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, 3);
-            selected.forEach(kw => {
-                const btn = document.createElement('button');
-                btn.className = 'btn-quick-kw'; 
-                if(containerId === 'step4-random-keywords') btn.className = 'btn btn-outline-secondary rounded-pill me-2 mb-2';
-                btn.innerText = kw;
-                const targetCat = getCategoryForKeyword(kw);
-                btn.onclick = () => {
-                    if (targetCat) {
-                        const targetPlans = groupedData[targetCat][kw];
-                        // ★★★ Fix: Pass targetCat explicitly ★★★
-                        renderStep3List(kw, targetPlans, true, targetCat); 
-                    } else { alert("無法找到此關鍵字"); }
-                };
-                container.appendChild(btn);
-            });
-        }
-
-        function switchSection(stepNum) {
-            document.querySelectorAll('.step-section').forEach(el => {
-                el.classList.remove('active');
-                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
-            });
-            const target = document.getElementById(`step-${stepNum}`);
-            if(target) {
-                target.style.display = 'block';
-                setTimeout(() => target.classList.add('active'), 10);
-            }
-        }
-
-        function toggleOutcome() {
-            const text = document.getElementById('d-outcome-text');
-            const btn = document.getElementById('d-outcome-toggle');
-            if (text.classList.contains('collapsed')) {
-                text.classList.remove('collapsed');
-                text.classList.add('expanded');
-                btn.innerText = '▲ 收合內容';
-            } else {
-                text.classList.remove('expanded');
-                text.classList.add('collapsed');
-                btn.innerText = '▼ 展開完整內容';
-            }
         }
 
         function updateBreadcrumbs() {
@@ -1317,13 +1251,10 @@
             list.innerHTML = '';
             if(currentView.step === 0) { nav.style.display = 'none'; return; }
             nav.style.display = 'block';
-            
             let homeLi = document.createElement('li');
             homeLi.className = 'breadcrumb-item';
-            // ★★★ Breadcrumb Home link goes to last slide ★★★
             homeLi.innerHTML = '<a onclick="goToStep(0, true, 5)">首頁</a>';
             list.appendChild(homeLi);
-            
             if(currentView.step >= 1) {
                 let catLi = document.createElement('li');
                 catLi.className = 'breadcrumb-item';
@@ -1334,7 +1265,6 @@
                 }
                 list.appendChild(catLi);
             }
-            // ... (Rest of breadcrumb logic)
             if(currentView.step >= 2) {
                 let kwLi = document.createElement('li');
                 kwLi.className = 'breadcrumb-item';
@@ -1351,7 +1281,6 @@
                 }
                 list.appendChild(listLi);
             }
-
             if(currentView.step === 4) {
                 let detailLi = document.createElement('li');
                 detailLi.className = 'breadcrumb-item active';
