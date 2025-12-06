@@ -38,7 +38,7 @@
             overflow-y: auto; 
         }
 
-        /* ★★★ Dark Theme for Step 0 (Homepage) ★★★ */
+        /* Dark Theme for Step 0 (Homepage) */
         body.step-0-active {
             background-color: #0f2027;
             background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
@@ -46,7 +46,7 @@
             overflow: hidden; /* Lock scroll ONLY on Step 0 */
         }
 
-        /* ★★★ FORCE HIDE Header & Footer on Homepage ★★★ */
+        /* FORCE HIDE Header & Footer on Homepage */
         body.step-0-active .site-header,
         body.step-0-active .site-footer {
             display: none !important;
@@ -91,9 +91,7 @@
         /* Loading */
         #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
 
-        /* =========================================
-           HERO SCROLLYTELLING STYLES (STEP 0)
-           ========================================= */
+        /* HERO SCROLLYTELLING STYLES */
         .hero-section { 
             height: 100vh; 
             width: 100%;
@@ -103,7 +101,6 @@
         }
         .hero-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px; pointer-events: none; }
         
-        /* Slides */
         .hero-slide {
             position: absolute;
             top: 0;
@@ -127,12 +124,12 @@
             z-index: 5;
         }
 
-        /* ★★★ Content Wrapper with INCREASED Top Padding ★★★ */
+        /* --- CONTENT WRAPPER --- */
         .slide-content-wrapper {
-            /* Increased top padding to prevent text from touching top edge */
+            /* Default (for inner pages or fallbacks) */
             padding-top: 120px; 
             padding-bottom: 40px;
-            padding-left: 1.5rem;
+            padding-left: 1.5rem; 
             padding-right: 1.5rem;
             text-align: center;
             max-width: 900px;
@@ -140,14 +137,19 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* Keeps content roughly centered vertically */
+            justify-content: center;
             height: 100%;
             box-sizing: border-box;
         }
 
-        /* Special padding for the last slide to avoid Footer overlap logic if needed (though footer is hidden now) */
-        #slide-5 .slide-content-wrapper {
-            padding-bottom: 140px; 
+        /* ★★★ FIX: HOMEPAGE PADDING RESET ★★★ */
+        /* On homepage (Step 0), remove the header spacing so content is truly centered */
+        body.step-0-active .slide-content-wrapper {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            /* Add just enough side padding to avoid dots */
+            padding-right: 3rem; 
+            padding-left: 1.5rem;
         }
 
         /* Typography */
@@ -191,14 +193,11 @@
             60% {transform: translateX(-50%) translateY(-5px);}
         }
 
-        /* ★★★ Chart Placeholders (Added Margin) ★★★ */
         .chart-box {
             width: 100%; max-width: 650px; height: 280px; 
             background: rgba(255,255,255,0.05); border: 2px dashed rgba(255,255,255,0.2);
             border-radius: 15px; display: flex; align-items: center; justify-content: center;
-            /* Increased top margin for spacing */
-            margin: 3rem auto 2rem auto; 
-            color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
+            margin: 1.5rem auto; color: rgba(255,255,255,0.6); font-weight: bold; font-size: 1rem;
         }
 
         .hero-quick-links { width: 100%; text-align: center; margin-top: 1.5rem; }
@@ -234,23 +233,27 @@
         }
         .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
 
-        /* ★★★ Bill Chart Wrapper (Increased Margin for Tooltip Space) ★★★ */
+        /* ★★★ Bill Chart Styles (Responsive Margin) ★★★ */
         .comp-chart-wrapper { 
             width: 100%; 
             max-width: 750px; 
-            /* Large top margin creates buffer for tooltip not to overlap text */
-            margin: 5rem auto 2rem auto; 
+            /* Use vh for margin to prevent overlap on small vertical screens */
+            margin: 3vh auto 2vh auto; 
             text-align: center; 
+            padding: 0 10px; 
+            position: relative; 
         }
         
         .comp-bar { 
             width: 100%; 
-            height: 320px; 
+            height: auto;
+            aspect-ratio: 2.15 / 1; 
             display: flex; 
             box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             background-color: #88b08b; 
+            /* IMAGE URL */
             background-image: url('Rectangle.png'); 
-            background-size: cover;
+            background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
             position: relative;
@@ -258,75 +261,56 @@
             border-radius: 12px; 
         }
         
-        .comp-segment { 
-            height: 100%; 
-            transition: all 0.2s; 
-            position: relative;
-            opacity: 0.7; 
-        }
-        
+        .comp-segment { height: 100%; transition: all 0.2s; position: relative; opacity: 0.7; }
         .comp-segment:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
+        .comp-segment:hover { opacity: 0.9; z-index: 2; }
 
-        .comp-segment:hover { 
-            opacity: 0.9; 
-            z-index: 2;
+        /* History Chart Styles */
+        .history-chart-wrapper {
+            width: 100%; max-width: 800px; height: 350px;
+            margin: 3rem auto 2rem auto; position: relative;
+            display: flex; align-items: flex-end; justify-content: space-between;
+            gap: 8px; overflow-x: auto; padding-bottom: 30px;
         }
+        .history-chart-wrapper::-webkit-scrollbar { height: 6px; }
+        .history-chart-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
+        .history-chart-wrapper::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
 
-        .comp-segment::after {
-            content: attr(data-tooltip);
-            position: absolute; 
-            bottom: 110%; 
-            left: 50%; 
-            transform: translateX(-50%);
-            background: rgba(0,0,0,0.9); 
-            color: #fff; 
-            padding: 8px 12px;
-            border-radius: 6px; 
-            font-size: 1rem; 
-            font-weight: bold;
-            white-space: nowrap;
-            pointer-events: none; 
-            opacity: 0;
-            transition: opacity 0.2s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 100;
-            border-bottom: 3px solid var(--accent-color);
+        .history-bar-group { flex: 1; min-width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; cursor: pointer; transition: opacity 0.2s; }
+        .history-bar-group:hover { opacity: 1 !important; }
+        .history-chart-wrapper:hover .history-bar-group:not(:hover) { opacity: 0.6; }
+
+        .history-bar { width: 100%; background-color: rgba(255,255,255,0.3); border-radius: 4px 4px 0 0; transition: height 1s cubic-bezier(0.22, 1, 0.36, 1); position: relative; min-height: 2px; }
+        .history-bar.active { background-color: var(--color-freeze); box-shadow: 0 0 15px rgba(241, 196, 15, 0.4); }
+        .history-label { position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: bold; }
+
+        /* Global Floating Tooltip */
+        #floating-tooltip {
+            position: fixed; display: none; background: rgba(0,0,0,0.9); color: #fff; 
+            padding: 8px 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; white-space: nowrap; 
+            pointer-events: none; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--accent-color); transform: translate(-50%, -100%); margin-top: -10px; 
         }
-        .comp-segment:hover::after { opacity: 1; }
         
         .comp-legend { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px; }
-        .comp-legend-item { 
-            display: flex; align-items: center; 
-            font-size: 0.9rem; 
-            color: rgba(255,255,255,0.9); 
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+        .comp-legend-item { display: flex; align-items: center; font-size: 0.9rem; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
         .comp-legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
 
         /* =========================================
            INNER STEPS & COMPONENTS
            ========================================= */
-        .step-section { 
-            display: none; 
-            padding-top: calc(var(--header-height) + 2rem); 
-            padding-bottom: 3rem; 
-            min-height: 100vh; 
-            animation: fadeIn 0.5s ease-out; 
-        }
+        .step-section { display: none; padding-top: calc(var(--header-height) + 2rem); padding-bottom: 3rem; min-height: 100vh; animation: fadeIn 0.5s ease-out; }
         .step-section.active { display: block; }
         .main-content-container { padding-top: 90px; padding-bottom: 3rem; color: #333; }
 
         .custom-breadcrumb { background: transparent; padding: 0; margin-bottom: 1rem; font-size: 0.85rem; }
-        .breadcrumb-item a { color: #6c757d; text-decoration: none; }
+        .breadcrumb-item a { color: #6c757d; text-decoration: none; cursor: pointer; }
         .breadcrumb-item.active { color: #adb5bd; }
 
         .category-card { cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border: none; border-radius: 16px; overflow: hidden; height: 100%; background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .category-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
-        .category-header { height: 140px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem; font-weight: bold; position: relative; }
+        .category-header { height: 140px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.8rem; font-weight: bold; position: relative; }
         .cat-icon { font-size: 3rem; margin-bottom: 0.5rem; display: block; text-align: center; }
 
         .btn-back { border: 1px solid #ced4da; color: #6c757d; background: white; font-size: 0.9rem; padding: 6px 16px; transition: all 0.2s; }
@@ -390,6 +374,13 @@
         .step4-footer { border-top: 1px solid #dee2e6; margin-top: 3rem; padding-top: 2rem; text-align: center; }
         .step4-footer h5 { margin-bottom: 1.5rem; color: #6c757d; font-weight: bold; }
 
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem; }
+            .slide-text { font-size: 1rem; }
+            /* Updated Padding for Mobile */
+            .slide-content-wrapper { padding-right: 3rem; padding-left: 1rem; }
+        }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -400,9 +391,11 @@
         <h4 class="text-muted">正在連線至預算資料庫...</h4>
     </div>
 
+    <div id="floating-tooltip"></div>
+
     <header class="site-header">
         <div class="container">
-            <a onclick="goToStep(0)" class="site-brand">
+            <a onclick="goToStep(0, true, 5)" class="site-brand">
                 <span style="font-size: 1.5rem; margin-right: 10px;">📊</span> 預算審查觀測站
             </a>
         </div>
@@ -446,9 +439,7 @@
                         115年度中央政府歲出編列 <span class="slide-highlight">3兆350億</span><br>
                         這些經費支應了國家各項施政計畫。
                     </p>
-                    <div class="chart-box">
-                        [總預算長條圖：3兆350億]
-                    </div>
+                    <div id="budget-history-chart" class="history-chart-wrapper"></div>
                 </div>
             </div>
 
@@ -506,7 +497,7 @@
 
             <section id="step-1" class="step-section">
                 <div class="mb-3 text-start">
-                    <button class="btn btn-back rounded-pill" onclick="goToStep(0, true, 5)">← 回上一頁</button>
+                    <button class="btn btn-back rounded-pill" onclick="handleGlobalBack()">← 回上一頁</button>
                 </div>
                 <div class="text-start mb-5">
                     <h2 class="display-6 fw-bold mb-2">請選擇支出類別</h2>
@@ -663,17 +654,30 @@
 
         const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
-        // Data for the homepage chart - updated colors to include transparency for bill effect
+        // Data for the homepage chart
         const budgetComposition = [
-            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(231, 76, 60, 0.8)" },
-            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(52, 152, 219, 0.8)" },
-            { name: "國防", value: 5488, trend: "▲", color: "rgba(44, 62, 80, 0.8)" },
-            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(241, 196, 15, 0.8)" },
-            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(155, 89, 182, 0.8)" },
-            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(230, 126, 34, 0.8)" },
-            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(149, 165, 166, 0.8)" },
-            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(26, 188, 156, 0.8)" },
-            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(46, 204, 113, 0.8)" }
+            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, // #6BBEBE
+            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, // #C37A64
+            { name: "國防", value: 5488, trend: "▲", color: "rgba(71, 120, 190, 0.9)" }, // #4778BE
+            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(131, 203, 118, 0.9)" }, // #83CB76
+            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(178, 185, 114, 0.9)" }, // #B2B972
+            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(166, 120, 177, 0.9)" }, // #A678B1
+            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(233, 180, 117, 0.9)" }, // #E9B475
+            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(72, 112, 136, 0.9)" }, // #487088
+            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(204, 155, 133, 0.9)" } // #CC9B85
+        ];
+        
+        const budgetHistory = [
+             { year: 106, amount: 1997995520 },
+             { year: 107, amount: 1991773071 },
+             { year: 108, amount: 2022029637 },
+             { year: 109, amount: 2102196982 },
+             { year: 110, amount: 2161517070 },
+             { year: 111, amount: 2262064189 },
+             { year: 112, amount: 2719098790 },
+             { year: 113, amount: 2881782095 },
+             { year: 114, amount: 3132468909 },
+             { year: 115, amount: 3034974371 }
         ];
 
         let groupedData = {};
@@ -686,6 +690,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
             renderHomepageChart();
+            renderHistoryChart(); 
             const heroSection = document.getElementById('step-0');
             heroSection.addEventListener('wheel', handleHeroScroll, { passive: false });
             let touchStartY = 0;
@@ -720,9 +725,14 @@
                         renderRandomKeywords('hero-random-keywords');
                         finishLoading();
                     },
-                    error: function(err) { console.error("CSV Load Error", err); useDemoData(); }
+                    error: function(err) {
+                        console.error("CSV Load Error", err);
+                        useDemoData();
+                    }
                 });
-            } else { useDemoData(); }
+            } else {
+                useDemoData();
+            }
         }
 
         function finishLoading() {
@@ -732,7 +742,6 @@
         }
 
         function useDemoData() {
-            // Demo data...
             const demoRows = [
                 { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
             ];
@@ -786,22 +795,76 @@
             return null;
         }
 
-        // ★★★ NEW FUNCTION: Render Homepage Interactive Chart ★★★
+        // ★★★ Render History Chart (Slide 2) ★★★
+        function renderHistoryChart() {
+            const container = document.getElementById('budget-history-chart');
+            if(!container) return;
+            
+            let html = '';
+            const maxVal = Math.max(...budgetHistory.map(d => d.amount));
+            
+            const tooltipTexts = {
+                115: "3兆350億", 114: "3兆1325億", 113: "2兆8818億",
+                112: "2兆7191億", 111: "2兆2621億", 110: "2兆1615億",
+                109: "2兆1022億", 108: "2兆220億", 107: "1兆9918億",
+                106: "1兆9980億"
+            };
+
+            const tooltip = document.getElementById('floating-tooltip');
+
+            budgetHistory.forEach(item => {
+                const heightPct = (item.amount / maxVal) * 100;
+                const isCurrent = item.year === 115;
+                const activeClass = isCurrent ? 'active' : '';
+                const tooltipText = `${item.year}年度 ${tooltipTexts[item.year]}`;
+
+                const group = document.createElement('div');
+                group.className = 'history-bar-group';
+                group.innerHTML = `
+                    <div class="history-bar ${activeClass}" style="height: ${heightPct}%;"></div>
+                    <div class="history-label">${item.year}</div>
+                `;
+                
+                group.addEventListener('mousemove', (e) => {
+                    tooltip.innerText = tooltipText;
+                    tooltip.style.display = 'block';
+                    
+                    const tooltipWidth = tooltip.offsetWidth;
+                    const windowWidth = window.innerWidth;
+                    let leftPos = e.clientX;
+                    
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
+                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
+
+                    tooltip.style.left = leftPos + 'px';
+                    tooltip.style.top = (e.clientY - 40) + 'px'; 
+                });
+                
+                group.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+
+                container.appendChild(group);
+            });
+        }
+
+        // ★★★ Render Homepage Interactive Chart (Slide 3) ★★★
         function renderHomepageChart() {
             const barContainer = document.getElementById('homepage-comp-bar');
             const legendContainer = document.getElementById('homepage-comp-legend');
+            const tooltip = document.getElementById('floating-tooltip');
             
             if(!barContainer || !legendContainer) return;
 
             const total = 30350; 
-            
             let barsHtml = '';
             let legendHtml = '';
 
             budgetComposition.forEach(item => {
                 const pct = (item.value / total) * 100;
                 const tooltipText = `${item.name}: ${item.value}億 (${item.trend})`;
-                barsHtml += `<div class="comp-segment" style="width: ${pct}%; background-color: ${item.color};" data-tooltip="${tooltipText}"></div>`;
+                // Use data-attribute to store text for JS
+                barsHtml += `<div class="comp-segment" style="width: ${pct}%; background-color: ${item.color};" data-tip="${tooltipText}"></div>`;
                 legendHtml += `
                     <div class="comp-legend-item">
                         <div class="comp-legend-color" style="background-color: ${item.color};"></div>
@@ -812,6 +875,26 @@
 
             barContainer.innerHTML = barsHtml;
             legendContainer.innerHTML = legendHtml;
+
+            const segments = barContainer.querySelectorAll('.comp-segment');
+            segments.forEach(seg => {
+                seg.addEventListener('mousemove', (e) => {
+                    const text = seg.getAttribute('data-tip');
+                    tooltip.innerText = text;
+                    tooltip.style.display = 'block';
+                    
+                    const tooltipWidth = tooltip.offsetWidth;
+                    const windowWidth = window.innerWidth;
+                    let leftPos = e.clientX;
+                    
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) { leftPos = windowWidth - tooltipWidth/2 - 10; }
+                    if (leftPos - tooltipWidth/2 < 10) { leftPos = tooltipWidth/2 + 10; }
+
+                    tooltip.style.left = leftPos + 'px';
+                    tooltip.style.top = (e.clientY - 40) + 'px'; 
+                });
+                seg.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+            });
         }
 
         // SCROLL HANDLING
@@ -856,7 +939,10 @@
         }
         function restoreState(state) {
             currentView = state;
-            if (state.step === 0) { goToStep(0, false); }
+            if (state.step === 0) { 
+                const targetSlide = state.slideIndex !== undefined ? state.slideIndex : 0;
+                goToStep(0, false, targetSlide); 
+            }
             else if (state.step === 1) { goToStep(1, false); }
             else if (state.step === 2) { selectCategory(state.catKey, false); }
             else if (state.step === 3) { 
@@ -876,9 +962,15 @@
         }
 
         function goToStep(step, isPush = true, slideIndex = 0) {
-            if(isPush && document.querySelector('.step-section.active')) pushHistory();
-            currentView = { step: step };
+            if(isPush) {
+                let stateToSave = JSON.parse(JSON.stringify(currentView));
+                if (currentView.step === 0) stateToSave.slideIndex = currentSlide;
+                historyStack.push(stateToSave);
+            }
             
+            currentView = { step: step };
+            if(step === 0) currentView.slideIndex = slideIndex;
+
             document.querySelectorAll('.step-section').forEach(el => {
                 el.classList.remove('active');
                 setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
@@ -1181,17 +1273,14 @@
                 }
                 list.appendChild(catLi);
             }
-            
+            // ... (Rest of breadcrumb logic)
             if(currentView.step >= 2) {
                 let kwLi = document.createElement('li');
                 kwLi.className = 'breadcrumb-item';
                 if(currentView.step === 2) { kwLi.classList.add('active'); kwLi.innerText = '選擇關鍵字'; }
-                else { 
-                    kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; 
-                }
+                else { kwLi.innerHTML = `<a onclick="selectCategory('${currentView.catKey}')">${currentView.kw || '關鍵字'}</a>`; }
                 list.appendChild(kwLi);
             }
-            
             if(currentView.step >= 3) {
                 let listLi = document.createElement('li');
                 listLi.className = 'breadcrumb-item';
