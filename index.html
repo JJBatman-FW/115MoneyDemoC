@@ -38,7 +38,7 @@
             overflow-y: auto; 
         }
 
-        /* Dark Theme for Step 0 (Homepage) */
+        /* ★★★ Dark Theme for Step 0 (Homepage) ★★★ */
         body.step-0-active {
             background-color: #0f2027;
             background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
@@ -46,7 +46,7 @@
             overflow: hidden; /* Lock scroll ONLY on Step 0 */
         }
 
-        /* FORCE HIDE Header & Footer on Homepage */
+        /* ★★★ FORCE HIDE Header & Footer on Homepage ★★★ */
         body.step-0-active .site-header,
         body.step-0-active .site-footer {
             display: none !important;
@@ -91,7 +91,9 @@
         /* Loading */
         #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
 
-        /* HERO SCROLLYTELLING STYLES */
+        /* =========================================
+           HERO SCROLLYTELLING STYLES (STEP 0)
+           ========================================= */
         .hero-section { 
             height: 100vh; 
             width: 100%;
@@ -101,6 +103,7 @@
         }
         .hero-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px; pointer-events: none; }
         
+        /* Slides */
         .hero-slide {
             position: absolute;
             top: 0;
@@ -124,13 +127,8 @@
             z-index: 5;
         }
 
-        /* --- CONTENT WRAPPER --- */
         .slide-content-wrapper {
-            /* Default (for inner pages or fallbacks) */
-            padding-top: 120px; 
-            padding-bottom: 40px;
-            padding-left: 1.5rem; 
-            padding-right: 1.5rem;
+            padding: 20px 1.5rem; 
             text-align: center;
             max-width: 900px;
             width: 100%;
@@ -142,15 +140,7 @@
             box-sizing: border-box;
         }
 
-        /* ★★★ FIX: HOMEPAGE PADDING RESET ★★★ */
-        /* On homepage (Step 0), remove the header spacing so content is truly centered */
-        body.step-0-active .slide-content-wrapper {
-            padding-top: 0 !important;
-            padding-bottom: 0 !important;
-            /* Add just enough side padding to avoid dots */
-            padding-right: 3rem; 
-            padding-left: 1.5rem;
-        }
+        #slide-5 .slide-content-wrapper { padding-bottom: 140px; }
 
         /* Typography */
         .slide-badge { font-size: 0.9rem; background: rgba(255,255,255,0.2); padding: 5px 12px; border-radius: 50px; margin-bottom: 20px; display: inline-block; backdrop-filter: blur(5px); }
@@ -233,12 +223,11 @@
         }
         .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
 
-        /* ★★★ Bill Chart Styles (Responsive Margin) ★★★ */
+        /* ★★★ Bill Chart Styles ★★★ */
         .comp-chart-wrapper { 
             width: 100%; 
             max-width: 750px; 
-            /* Use vh for margin to prevent overlap on small vertical screens */
-            margin: 3vh auto 2vh auto; 
+            margin: 5rem auto 2rem auto; 
             text-align: center; 
             padding: 0 10px; 
             position: relative; 
@@ -261,46 +250,112 @@
             border-radius: 12px; 
         }
         
-        .comp-segment { height: 100%; transition: all 0.2s; position: relative; opacity: 0.7; }
+        .comp-segment { 
+            height: 100%; 
+            transition: all 0.2s; 
+            position: relative;
+            opacity: 0.7; 
+        }
         .comp-segment:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
         .comp-segment:hover { opacity: 0.9; z-index: 2; }
 
         /* History Chart Styles */
         .history-chart-wrapper {
-            width: 100%; max-width: 800px; height: 350px;
-            margin: 3rem auto 2rem auto; position: relative;
-            display: flex; align-items: flex-end; justify-content: space-between;
-            gap: 8px; overflow-x: auto; padding-bottom: 30px;
+            width: 100%;
+            max-width: 800px;
+            height: 350px;
+            margin: 3rem auto 2rem auto;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 30px;
         }
         .history-chart-wrapper::-webkit-scrollbar { height: 6px; }
         .history-chart-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
         .history-chart-wrapper::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
 
-        .history-bar-group { flex: 1; min-width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; cursor: pointer; transition: opacity 0.2s; }
+        .history-bar-group {
+            flex: 1;
+            min-width: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            position: relative;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
         .history-bar-group:hover { opacity: 1 !important; }
         .history-chart-wrapper:hover .history-bar-group:not(:hover) { opacity: 0.6; }
 
-        .history-bar { width: 100%; background-color: rgba(255,255,255,0.3); border-radius: 4px 4px 0 0; transition: height 1s cubic-bezier(0.22, 1, 0.36, 1); position: relative; min-height: 2px; }
-        .history-bar.active { background-color: var(--color-freeze); box-shadow: 0 0 15px rgba(241, 196, 15, 0.4); }
-        .history-label { position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: bold; }
+        .history-bar {
+            width: 100%;
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            min-height: 2px;
+        }
+        .history-bar.active {
+            background-color: var(--color-freeze); 
+            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
+        }
 
-        /* Global Floating Tooltip */
+        .history-label {
+            position: absolute;
+            bottom: -25px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: bold;
+        }
+
+        /* ★★★ GLOBAL FLOATING TOOLTIP ★★★ */
         #floating-tooltip {
-            position: fixed; display: none; background: rgba(0,0,0,0.9); color: #fff; 
-            padding: 8px 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; white-space: nowrap; 
-            pointer-events: none; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border-bottom: 3px solid var(--accent-color); transform: translate(-50%, -100%); margin-top: -10px; 
+            position: fixed;
+            display: none;
+            background: rgba(0,0,0,0.9); 
+            color: #fff; 
+            padding: 8px 12px;
+            border-radius: 6px; 
+            font-size: 1rem; 
+            font-weight: bold;
+            white-space: nowrap;
+            pointer-events: none; 
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--accent-color);
+            transform: translate(-50%, -100%);
+            margin-top: -10px; 
         }
         
         .comp-legend { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px; }
-        .comp-legend-item { display: flex; align-items: center; font-size: 0.9rem; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .comp-legend-item { 
+            display: flex; align-items: center; 
+            font-size: 0.9rem; 
+            color: rgba(255,255,255,0.9); 
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
         .comp-legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
 
         /* =========================================
            INNER STEPS & COMPONENTS
            ========================================= */
-        .step-section { display: none; padding-top: calc(var(--header-height) + 2rem); padding-bottom: 3rem; min-height: 100vh; animation: fadeIn 0.5s ease-out; }
+        .step-section { 
+            display: none; 
+            padding-top: calc(var(--header-height) + 2rem); 
+            padding-bottom: 3rem; 
+            min-height: 100vh; 
+            animation: fadeIn 0.5s ease-out; 
+        }
         .step-section.active { display: block; }
         .main-content-container { padding-top: 90px; padding-bottom: 3rem; color: #333; }
 
@@ -377,7 +432,6 @@
         @media (max-width: 768px) {
             .hero-title { font-size: 2rem; }
             .slide-text { font-size: 1rem; }
-            /* Updated Padding for Mobile */
             .slide-content-wrapper { padding-right: 3rem; padding-left: 1rem; }
         }
 
@@ -654,7 +708,14 @@
 
         const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
-        // Data for the homepage chart
+        let groupedData = {};
+        let allKeywords = [];
+        let historyStack = [];
+        let currentView = { step: 0 };
+        let currentSlide = 0;
+        let isScrolling = false;
+
+        // Data for the homepage chart - updated colors to include transparency for bill effect
         const budgetComposition = [
             { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, // #6BBEBE
             { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, // #C37A64
@@ -680,13 +741,6 @@
              { year: 115, amount: 3034974371 }
         ];
 
-        let groupedData = {};
-        let allKeywords = [];
-        let historyStack = [];
-        let currentView = { step: 0 };
-        let currentSlide = 0;
-        let isScrolling = false;
-
         document.addEventListener('DOMContentLoaded', () => {
             initApp();
             renderHomepageChart();
@@ -708,7 +762,6 @@
         });
 
         function initApp() {
-            // SAFE CHECK
             if (typeof Papa === 'undefined') {
                 console.error("PapaParse library failed to load. Switching to Demo Data.");
                 useDemoData();
@@ -742,6 +795,7 @@
         }
 
         function useDemoData() {
+            // Demo data...
             const demoRows = [
                 { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
             ];
@@ -940,6 +994,7 @@
         function restoreState(state) {
             currentView = state;
             if (state.step === 0) { 
+                // ★★★ Restore to specific slide index ★★★
                 const targetSlide = state.slideIndex !== undefined ? state.slideIndex : 0;
                 goToStep(0, false, targetSlide); 
             }
@@ -954,10 +1009,16 @@
         // Layout Managers
         function enterInnerPageMode() {
             document.body.classList.remove('step-0-active');
+            document.querySelector('.site-header').style.display = 'flex';
+            const footer = document.querySelector('.site-footer');
+            footer.style.display = 'block';
+            footer.style.position = 'relative';
         }
         
         function enterHeroPageMode(slideIndex = 0) {
             document.body.classList.add('step-0-active');
+            document.querySelector('.site-header').style.display = 'none';
+            document.querySelector('.site-footer').style.display = 'none';
             changeSlide(slideIndex); 
         }
 
