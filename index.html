@@ -15,11 +15,7 @@
             --secondary-color: #34495e;
             --accent-color: #e74c3c;
             --bg-light: #f8f9fa;
-            
-            /* Dimensions */
             --header-height: 60px; 
-            
-            /* Colors */
             --color-remain: #2ecc71;
             --color-freeze: #f1c40f;
             --color-cut: #e74c3c;
@@ -38,19 +34,17 @@
             overflow-y: auto; 
         }
 
-        /* ★★★ Dark Theme for Step 0 (Homepage) ★★★ */
+        /* Dark Theme for Step 0 */
         body.step-0-active {
             background-color: #0f2027;
             background: linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             background-attachment: fixed;
-            overflow: hidden; /* Lock scroll ONLY on Step 0 */
+            overflow: hidden; 
         }
 
-        /* ★★★ FORCE HIDE Header & Footer on Homepage ★★★ */
+        /* Force HIDE Header & Footer on Homepage */
         body.step-0-active .site-header,
-        body.step-0-active .site-footer {
-            display: none !important;
-        }
+        body.step-0-active .site-footer { display: none !important; }
 
         main { flex: 1; position: relative; }
         h1, h2, h3, h5, .serif-font { font-family: 'Noto Serif TC', serif; }
@@ -91,41 +85,17 @@
         /* Loading */
         #loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.5s; }
 
-        /* =========================================
-           HERO SCROLLYTELLING STYLES (STEP 0)
-           ========================================= */
-        .hero-section { 
-            height: 100vh; 
-            width: 100%;
-            color: white; 
-            position: relative; 
-            overflow: hidden; 
-        }
+        /* HERO STYLES */
+        .hero-section { height: 100vh; width: 100%; color: white; position: relative; overflow: hidden; }
         .hero-bg-pattern { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.1; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 30px 30px; pointer-events: none; }
         
-        /* Slides */
         .hero-slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            pointer-events: none; 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; 
             transform: scale(0.98) translateY(30px);
             transition: opacity 0.8s ease, transform 0.8s ease;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 0; display: flex; justify-content: center; align-items: center;
         }
-        
-        .hero-slide.active {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1) translateY(0);
-            z-index: 5;
-        }
+        .hero-slide.active { opacity: 1; pointer-events: auto; transform: scale(1) translateY(0); z-index: 5; }
 
         .slide-content-wrapper {
             padding: 20px 1.5rem; 
@@ -148,40 +118,12 @@
         .slide-text { font-size: 1.1rem; line-height: 1.8; color: rgba(255,255,255,0.9); max-width: 750px; margin: 0 auto; }
         .slide-highlight { color: #f1c40f; font-weight: bold; font-size: 1.1em; }
         
-        /* Navigation Dots */
-        .hero-dots {
-            position: absolute;
-            right: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 20;
-        }
-        .hero-dot {
-            width: 10px; height: 10px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.3);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
+        .hero-dots { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 12px; z-index: 20; }
+        .hero-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.3); cursor: pointer; transition: all 0.3s; }
         .hero-dot.active { background: white; transform: scale(1.3); }
         
-        .scroll-hint {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.8rem;
-            animation: bounce 2s infinite;
-        }
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);}
-            40% {transform: translateX(-50%) translateY(-10px);}
-            60% {transform: translateX(-50%) translateY(-5px);}
-        }
+        .scroll-hint { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.6); font-size: 0.8rem; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateX(-50%) translateY(0);} 40% {transform: translateX(-50%) translateY(-10px);} 60% {transform: translateX(-50%) translateY(-5px);} }
 
         .chart-box {
             width: 100%; max-width: 650px; height: 280px; 
@@ -193,169 +135,55 @@
         .hero-quick-links { width: 100%; text-align: center; margin-top: 1.5rem; }
         .hero-prompt { font-size: 1rem; color: rgba(255, 255, 255, 0.9); margin-bottom: 0.8rem; font-weight: 500; letter-spacing: 0.5px; }
         
-        .btn-quick-kw { 
-            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); 
-            color: white; margin: 0 6px 10px 6px; border-radius: 50px; 
-            padding: 10px 25px; backdrop-filter: blur(5px); 
-            transition: all 0.2s; font-size: 1.1rem; font-weight: bold; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .btn-quick-kw { background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.6); color: white; margin: 0 6px 10px 6px; border-radius: 50px; padding: 10px 25px; backdrop-filter: blur(5px); transition: all 0.2s; font-size: 1.1rem; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .btn-quick-kw:hover { background: white; color: var(--primary-color); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
         
-        .btn-refresh-keywords {
-            background: transparent;
-            border: 1px solid rgba(255,255,255,0.3);
-            color: rgba(255,255,255,0.7);
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            transition: all 0.3s;
-            cursor: pointer;
-            display: inline-block;
-        }
+        .btn-refresh-keywords { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: rgba(255,255,255,0.7); border-radius: 20px; padding: 4px 12px; font-size: 0.8rem; margin-bottom: 15px; transition: all 0.3s; cursor: pointer; display: inline-block; }
         .btn-refresh-keywords:hover { background: rgba(255,255,255,0.15); color: white; border-color: white; }
 
-        .btn-full-budget { 
-            background: var(--accent-color); color: white; font-weight: bold; 
-            margin-top: 10px; border-radius: 50px; padding: 10px 30px; border: none; 
-            transition: all 0.2s; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
-        }
+        .btn-full-budget { background: var(--accent-color); color: white; font-weight: bold; margin-top: 10px; border-radius: 50px; padding: 10px 30px; border: none; transition: all 0.2s; font-size: 1.1rem; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4); }
         .btn-full-budget:hover { background: #c0392b; transform: translateY(-2px); box-shadow: 0 8px 25px rgba(231, 76, 60, 0.6); }
 
-        /* ★★★ Bill Chart Styles ★★★ */
-        .comp-chart-wrapper { 
-            width: 100%; 
-            max-width: 750px; 
-            margin: 5rem auto 2rem auto; 
-            text-align: center; 
-            padding: 0 10px; 
-            position: relative; 
-        }
-        
+        /* Bill Chart Styles */
+        .comp-chart-wrapper { width: 100%; max-width: 750px; margin: 5rem auto 2rem auto; text-align: center; padding: 0 10px; position: relative; }
         .comp-bar { 
-            width: 100%; 
-            height: auto;
-            aspect-ratio: 2.15 / 1; 
-            display: flex; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
-            
+            width: 100%; height: auto; aspect-ratio: 2.15 / 1; display: flex; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
             background-color: #88b08b; 
             background-image: url('https://upload.wikimedia.org/wikipedia/commons/0/06/1000_New_Taiwan_Dollar_2004_Obverse.jpg'); 
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
-            position: relative;
-            cursor: help;
-            border-radius: 12px; 
+            background-size: 100% 100%; background-position: center; background-repeat: no-repeat; 
+            position: relative; cursor: help; border-radius: 12px; 
         }
-        
-        .comp-segment { 
-            height: 100%; 
-            transition: all 0.2s; 
-            position: relative;
-            opacity: 0.7; 
-        }
+        .comp-segment { height: 100%; transition: all 0.2s; position: relative; opacity: 0.7; }
         .comp-segment:first-child { border-top-left-radius: 12px; border-bottom-left-radius: 12px; }
         .comp-segment:last-child { border-top-right-radius: 12px; border-bottom-right-radius: 12px; }
         .comp-segment:hover { opacity: 0.9; z-index: 2; }
 
-        /* ★★★ History Chart Styles ★★★ */
-        .history-chart-wrapper {
-            width: 100%;
-            max-width: 800px;
-            height: 350px;
-            margin: 3rem auto 2rem auto;
-            position: relative;
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 30px;
-        }
+        /* History Chart Styles */
+        .history-chart-wrapper { width: 100%; max-width: 800px; height: 350px; margin: 3rem auto 2rem auto; position: relative; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; overflow-x: auto; padding-bottom: 30px; }
         .history-chart-wrapper::-webkit-scrollbar { height: 6px; }
         .history-chart-wrapper::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 3px; }
         .history-chart-wrapper::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
-
-        .history-bar-group {
-            flex: 1;
-            min-width: 40px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            position: relative;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
+        .history-bar-group { flex: 1; min-width: 40px; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; position: relative; cursor: pointer; transition: opacity 0.2s; }
         .history-bar-group:hover { opacity: 1 !important; }
         .history-chart-wrapper:hover .history-bar-group:not(:hover) { opacity: 0.6; }
+        .history-bar { width: 100%; background-color: rgba(255,255,255,0.3); border-radius: 4px 4px 0 0; transition: height 1s cubic-bezier(0.22, 1, 0.36, 1); position: relative; min-height: 2px; }
+        .history-bar.active { background-color: var(--color-freeze); box-shadow: 0 0 15px rgba(241, 196, 15, 0.4); }
+        .history-label { position: absolute; bottom: -25px; width: 100%; text-align: center; font-size: 0.85rem; color: rgba(255,255,255,0.8); font-weight: bold; }
 
-        .history-bar {
-            width: 100%;
-            background-color: rgba(255,255,255,0.3);
-            border-radius: 4px 4px 0 0;
-            transition: height 1s cubic-bezier(0.22, 1, 0.36, 1);
-            position: relative;
-            min-height: 2px;
-        }
-        .history-bar.active {
-            background-color: var(--color-freeze); 
-            box-shadow: 0 0 15px rgba(241, 196, 15, 0.4);
-        }
-
-        .history-label {
-            position: absolute;
-            bottom: -25px;
-            width: 100%;
-            text-align: center;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.8);
-            font-weight: bold;
-        }
-
-        /* ★★★ GLOBAL FLOATING TOOLTIP ★★★ */
+        /* Floating Tooltip */
         #floating-tooltip {
-            position: fixed;
-            display: none;
-            background: rgba(0,0,0,0.9); 
-            color: #fff; 
-            padding: 8px 12px;
-            border-radius: 6px; 
-            font-size: 1rem; 
-            font-weight: bold;
-            white-space: nowrap;
-            pointer-events: none; 
-            z-index: 9999;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            border-bottom: 3px solid var(--accent-color);
-            transform: translate(-50%, -100%);
-            margin-top: -10px; 
+            position: fixed; display: none; background: rgba(0,0,0,0.9); color: #fff; 
+            padding: 8px 12px; border-radius: 6px; font-size: 1rem; font-weight: bold; white-space: nowrap; 
+            pointer-events: none; z-index: 9999; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border-bottom: 3px solid var(--accent-color); transform: translate(-50%, -100%); margin-top: -10px; 
         }
         
         .comp-legend { display: flex; flex-wrap: wrap; justify-content: center; margin-top: 20px; gap: 10px; }
-        .comp-legend-item { 
-            display: flex; align-items: center; 
-            font-size: 0.9rem; 
-            color: rgba(255,255,255,0.9); 
-            background: rgba(255,255,255,0.1);
-            padding: 5px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
+        .comp-legend-item { display: flex; align-items: center; font-size: 0.9rem; color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
         .comp-legend-color { width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
 
-        /* =========================================
-           INNER STEPS & COMPONENTS
-           ========================================= */
-        .step-section { 
-            display: none; 
-            padding-top: calc(var(--header-height) + 2rem); 
-            padding-bottom: 3rem; 
-            min-height: 100vh; 
-            animation: fadeIn 0.5s ease-out; 
-        }
+        /* Inner Steps */
+        .step-section { display: none; padding-top: calc(var(--header-height) + 2rem); padding-bottom: 3rem; min-height: 100vh; animation: fadeIn 0.5s ease-out; }
         .step-section.active { display: block; }
         .main-content-container { padding-top: 90px; padding-bottom: 3rem; color: #333; }
 
@@ -380,7 +208,6 @@
         .tag-agency { display: inline-block; background-color: #6c757d; color: white; font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
         .tag-status { display: inline-block; background-color: #17a2b8; color: white; font-size: 0.8rem; padding: 3px 8px; border-radius: 4px; font-weight: 500; }
 
-        /* Detail Page Styles */
         .detail-page-card { background: white; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); padding: 40px; margin-bottom: 2rem; }
         .detail-agency-tag, .modal-agency-tag { background-color: #95a5a6; color: white; padding: 6px 12px; font-size: 1rem; border-radius: 4px; margin-bottom: 1rem; display: inline-block; }
         .detail-plan-title, .modal-plan-title { font-weight: 800; font-size: 2.2rem; color: #2c3e50; line-height: 1.3; margin-bottom: 1rem; }
@@ -504,7 +331,6 @@
                         其中比例最高的是 <span class="slide-highlight">社會福利8318億</span>，<br>
                         其次是教育文化及國防。
                     </p>
-                    
                     <div class="comp-chart-wrapper">
                         <div id="homepage-comp-bar" class="comp-bar"></div>
                         <div id="homepage-comp-legend" class="comp-legend"></div>
@@ -529,20 +355,16 @@
                         為此我們整理了115年度中央政府總預算案，並隨機提供關鍵字，<br>
                         讀者可以直接點選關鍵字，了解相關預算的編列與審查過程：
                     </p>
-                    
                     <button class="btn-refresh-keywords" onclick="renderRandomKeywords('hero-random-keywords')">
                         🔄 換一組關鍵字
                     </button>
-
                     <div id="hero-random-keywords" class="d-flex justify-content-center flex-wrap mb-4"></div>
-
                     <button class="btn btn-full-budget" onclick="goToStep(1)">看完整預算 →</button>
                 </div>
             </div>
         </section>
 
         <div class="container main-content-container">
-            
             <nav aria-label="breadcrumb" id="breadcrumb-nav" style="display:none;">
                 <ol class="breadcrumb custom-breadcrumb" id="breadcrumb-list"></ol>
             </nav>
@@ -586,7 +408,6 @@
                 <div class="mb-3 text-start">
                     <button class="btn btn-back rounded-pill" onclick="handleGlobalBack()">← 回上一頁</button>
                 </div>
-
                 <div class="detail-page-card">
                     <div class="mb-4">
                         <span class="detail-agency-tag" id="d-agency"></span>
@@ -596,13 +417,11 @@
                             <span class="detail-total-amount" id="d-amount"></span>
                         </div>
                     </div>
-
                     <div class="outcome-container">
                         <h6 class="fw-bold text-secondary mb-2">計畫內容與預期成果</h6>
                         <p class="outcome-text collapsed" id="d-outcome-text"></p>
                         <a id="d-outcome-toggle" class="outcome-toggle-btn" onclick="toggleOutcome()">▼ 展開完整內容</a>
                     </div>
-
                     <h6 class="fw-bold text-secondary">預算審查結果占比</h6>
                     <div class="status-bar-container" id="d-status-bar"></div>
                     <div class="d-flex justify-content-between small text-muted mb-4">
@@ -610,29 +429,20 @@
                         <div class="d-flex align-items-center"><div style="width:10px;height:10px;background:var(--color-freeze);margin-right:5px;"></div>凍結</div>
                         <div class="d-flex align-items-center"><div style="width:10px;height:10px;background:var(--color-cut);margin-right:5px;"></div>刪減</div>
                     </div>
-
                     <h6 class="fw-bold text-secondary mt-5">各階段審查刪凍變化</h6>
                     <div class="legend-row">
                         <div><span class="legend-dot" style="background:var(--color-cut)"></span>刪減</div>
                         <div><span class="legend-dot" style="background:var(--color-freeze)"></span>凍結</div>
                     </div>
                     <div class="chart-wrapper" id="d-chart-wrapper"></div>
-
                     <h6 class="fw-bold text-secondary mt-4">刪減凍結細目</h6>
                     <div class="scroll-table-container">
                         <table class="table table-hover table-custom mb-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col" width="30%">項目</th>
-                                    <th scope="col">說明 / 理由</th>
-                                </tr>
-                            </thead>
+                            <thead><tr><th scope="col" width="30%">項目</th><th scope="col">說明 / 理由</th></tr></thead>
                             <tbody id="d-details-table-body"></tbody>
                         </table>
                     </div>
-
                     <div id="d-general-cut" class="general-cut-alert d-none"></div>
-
                     <div class="row mt-4">
                         <div class="col-md-6">
                             <div class="legis-label text-danger">提案刪減委員</div>
@@ -643,7 +453,6 @@
                             <div id="d-legis-freeze"></div>
                         </div>
                     </div>
-
                     <div class="step4-footer">
                         <h5>想了解其他預算？</h5>
                         <button class="btn-refresh-keywords" style="border:1px solid #ccc; color:#666; background:transparent; margin-bottom:15px;" onclick="renderRandomKeywords('step4-random-keywords')">🔄 換一組</button>
@@ -706,17 +515,17 @@
 
         const CHART_COLORS = ['#3498db', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#34495e', '#e67e22'];
 
-        // Data for the homepage chart
+        // Data for the homepage chart - updated colors to include transparency for bill effect
         const budgetComposition = [
-            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, 
-            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, 
-            { name: "國防", value: 5488, trend: "▲", color: "rgba(71, 120, 190, 0.9)" }, 
-            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(131, 203, 118, 0.9)" }, 
-            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(178, 185, 114, 0.9)" }, 
-            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(166, 120, 177, 0.9)" }, 
-            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(233, 180, 117, 0.9)" }, 
-            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(72, 112, 136, 0.9)" }, 
-            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(204, 155, 133, 0.9)" } 
+            { name: "社會福利", value: 8318, trend: "▲", color: "rgba(107, 190, 190, 0.9)" }, // #6BBEBE
+            { name: "教育科學文化", value: 5566, trend: "▼", color: "rgba(195, 122, 100, 0.9)" }, // #C37A64
+            { name: "國防", value: 5488, trend: "▲", color: "rgba(71, 120, 190, 0.9)" }, // #4778BE
+            { name: "經濟發展", value: 4275, trend: "▲", color: "rgba(131, 203, 118, 0.9)" }, // #83CB76
+            { name: "一般政務", value: 3026, trend: "▲", color: "rgba(178, 185, 114, 0.9)" }, // #B2B972
+            { name: "退休撫卹", value: 1844, trend: "▲", color: "rgba(166, 120, 177, 0.9)" }, // #A678B1
+            { name: "債務還本付息", value: 1063, trend: "-", color: "rgba(233, 180, 117, 0.9)" }, // #E9B475
+            { name: "補助及其他", value: 504, trend: "▼", color: "rgba(72, 112, 136, 0.9)" }, // #487088
+            { name: "社區發展及環境保護", value: 266, trend: "▼", color: "rgba(204, 155, 133, 0.9)" } // #CC9B85
         ];
         
         const budgetHistory = [
@@ -768,6 +577,7 @@
         });
 
         function initApp() {
+            // SAFE CHECK
             if (typeof Papa === 'undefined') {
                 console.error("PapaParse library failed to load. Switching to Demo Data.");
                 useDemoData();
@@ -801,6 +611,7 @@
         }
 
         function useDemoData() {
+            // Demo data...
             const demoRows = [
                 { category: 'state', title: '機關基本運作', agency: '總統府', amount: '10.8 億元', details: '古蹟修繕;資安維護', review_status: '照案通過', sub_breakdown: '人員:700000; 古蹟:300000', cut_frozen_val: '100, 200', review_stats: '100,50; 80,50; 80,50', details_table: '水電|刪100', general_cut: '', legis_cut: '王大明', legis_freeze: '李四' }
             ];
@@ -854,32 +665,60 @@
             return null;
         }
 
-        // ★★★ ALL FUNCTIONS MUST BE AT TOP LEVEL ★★★
+        // ★★★ Render History Chart (Slide 2) ★★★
+        function renderHistoryChart() {
+            const container = document.getElementById('budget-history-chart');
+            if(!container) return;
+            
+            let html = '';
+            const maxVal = Math.max(...budgetHistory.map(d => d.amount));
+            
+            const tooltipTexts = {
+                115: "3兆350億", 114: "3兆1325億", 113: "2兆8818億",
+                112: "2兆7191億", 111: "2兆2621億", 110: "2兆1615億",
+                109: "2兆1022億", 108: "2兆220億", 107: "1兆9918億",
+                106: "1兆9980億"
+            };
 
-        // 1. Render Random Keywords
-        function renderRandomKeywords(containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            if (allKeywords.length === 0) return;
-            const shuffled = allKeywords.sort(() => 0.5 - Math.random());
-            const selected = shuffled.slice(0, 3);
-            selected.forEach(kw => {
-                const btn = document.createElement('button');
-                btn.className = 'btn-quick-kw'; 
-                if(containerId === 'step4-random-keywords') btn.className = 'btn btn-outline-secondary rounded-pill me-2 mb-2';
-                btn.innerText = kw;
-                const targetCat = getCategoryForKeyword(kw);
-                btn.onclick = () => {
-                    if (targetCat) {
-                        const targetPlans = groupedData[targetCat][kw];
-                        renderStep3List(kw, targetPlans, true, targetCat); 
-                    } else { alert("無法找到此關鍵字"); }
-                };
-                container.appendChild(btn);
+            const tooltip = document.getElementById('floating-tooltip');
+
+            budgetHistory.forEach(item => {
+                const heightPct = (item.amount / maxVal) * 100;
+                const isCurrent = item.year === 115;
+                const activeClass = isCurrent ? 'active' : '';
+                const tooltipText = `${item.year}年度 ${tooltipTexts[item.year]}`;
+
+                const group = document.createElement('div');
+                group.className = 'history-bar-group';
+                group.innerHTML = `
+                    <div class="history-bar ${activeClass}" style="height: ${heightPct}%;"></div>
+                    <div class="history-label">${item.year}</div>
+                `;
+                
+                group.addEventListener('mousemove', (e) => {
+                    tooltip.innerText = tooltipText;
+                    tooltip.style.display = 'block';
+                    
+                    const tooltipWidth = tooltip.offsetWidth;
+                    const windowWidth = window.innerWidth;
+                    let leftPos = e.clientX;
+                    
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
+                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
+
+                    tooltip.style.left = leftPos + 'px';
+                    tooltip.style.top = (e.clientY - 40) + 'px'; 
+                });
+                
+                group.addEventListener('mouseleave', () => {
+                    tooltip.style.display = 'none';
+                });
+
+                container.appendChild(group);
             });
         }
 
-        // 2. Render Homepage Chart
+        // ★★★ Render Homepage Interactive Chart (Slide 3) ★★★
         function renderHomepageChart() {
             const barContainer = document.getElementById('homepage-comp-bar');
             const legendContainer = document.getElementById('homepage-comp-legend');
@@ -912,11 +751,14 @@
                     const text = seg.getAttribute('data-tip');
                     tooltip.innerText = text;
                     tooltip.style.display = 'block';
+                    
                     const tooltipWidth = tooltip.offsetWidth;
                     const windowWidth = window.innerWidth;
                     let leftPos = e.clientX;
-                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
-                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
+                    
+                    if (leftPos + tooltipWidth/2 > windowWidth - 10) { leftPos = windowWidth - tooltipWidth/2 - 10; }
+                    if (leftPos - tooltipWidth/2 < 10) { leftPos = tooltipWidth/2 + 10; }
+
                     tooltip.style.left = leftPos + 'px';
                     tooltip.style.top = (e.clientY - 40) + 'px'; 
                 });
@@ -924,48 +766,30 @@
             });
         }
 
-        // 3. Render History Chart
-        function renderHistoryChart() {
-            const container = document.getElementById('budget-history-chart');
-            if(!container) return;
-            let html = '';
-            const maxVal = Math.max(...budgetHistory.map(d => d.amount));
-            const tooltipTexts = {
-                115: "3兆350億", 114: "3兆1325億", 113: "2兆8818億",
-                112: "2兆7191億", 111: "2兆2621億", 110: "2兆1615億",
-                109: "2兆1022億", 108: "2兆220億", 107: "1兆9918億",
-                106: "1兆9980億"
-            };
-            const tooltip = document.getElementById('floating-tooltip');
-
-            budgetHistory.forEach(item => {
-                const heightPct = (item.amount / maxVal) * 100;
-                const isCurrent = item.year === 115;
-                const activeClass = isCurrent ? 'active' : '';
-                const tooltipText = `${item.year}年度 ${tooltipTexts[item.year]}`;
-                const group = document.createElement('div');
-                group.className = 'history-bar-group';
-                group.innerHTML = `
-                    <div class="history-bar ${activeClass}" style="height: ${heightPct}%;"></div>
-                    <div class="history-label">${item.year}</div>
-                `;
-                group.addEventListener('mousemove', (e) => {
-                    tooltip.innerText = tooltipText;
-                    tooltip.style.display = 'block';
-                    const tooltipWidth = tooltip.offsetWidth;
-                    const windowWidth = window.innerWidth;
-                    let leftPos = e.clientX;
-                    if (leftPos + tooltipWidth/2 > windowWidth - 10) leftPos = windowWidth - tooltipWidth/2 - 10;
-                    if (leftPos - tooltipWidth/2 < 10) leftPos = tooltipWidth/2 + 10;
-                    tooltip.style.left = leftPos + 'px';
-                    tooltip.style.top = (e.clientY - 40) + 'px'; 
-                });
-                group.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-                container.appendChild(group);
+        // ★★★ Render Random Keywords ★★★
+        function renderRandomKeywords(containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            if (allKeywords.length === 0) return;
+            const shuffled = allKeywords.sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 3);
+            selected.forEach(kw => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-quick-kw'; 
+                if(containerId === 'step4-random-keywords') btn.className = 'btn btn-outline-secondary rounded-pill me-2 mb-2';
+                btn.innerText = kw;
+                const targetCat = getCategoryForKeyword(kw);
+                btn.onclick = () => {
+                    if (targetCat) {
+                        const targetPlans = groupedData[targetCat][kw];
+                        // ★★★ Fix: Pass targetCat explicitly ★★★
+                        renderStep3List(kw, targetPlans, true, targetCat); 
+                    } else { alert("無法找到此關鍵字"); }
+                };
+                container.appendChild(btn);
             });
         }
-
-        // 4. Render Categories
+        
         function renderCategories() {
             const container = document.getElementById('category-container');
             if(!container) return;
@@ -991,14 +815,14 @@
                 container.appendChild(col);
             }
         }
-        
-        // 5. Helper: Hide Tooltip
+
+        // ★★★ Hide Tooltip on Scroll ★★★
         function hideTooltip() {
              const tooltip = document.getElementById('floating-tooltip');
              if(tooltip) tooltip.style.display = 'none';
         }
 
-        // 6. Scroll & Slide Logic
+        // SCROLL HANDLING
         function handleHeroScroll(e) {
             if (isScrolling) { e.preventDefault(); return; }
             hideTooltip();
@@ -1024,7 +848,7 @@
         }
         function jumpToSlide(index) { changeSlide(index); }
 
-        // 7. Navigation & State
+        // Nav Logic
         function pushHistory() { historyStack.push(JSON.parse(JSON.stringify(currentView))); }
         function handleGlobalBack() {
             if (historyStack.length === 0) { goToStep(0, false); return; }
@@ -1045,8 +869,14 @@
             } else if (state.step === 4) { renderStep4(state.plan, false); }
         }
 
-        function enterInnerPageMode() { document.body.classList.remove('step-0-active'); }
-        function enterHeroPageMode(slideIndex = 0) { document.body.classList.add('step-0-active'); changeSlide(slideIndex); }
+        function enterInnerPageMode() {
+            document.body.classList.remove('step-0-active');
+        }
+        
+        function enterHeroPageMode(slideIndex = 0) {
+            document.body.classList.add('step-0-active');
+            changeSlide(slideIndex); 
+        }
 
         function goToStep(step, isPush = true, slideIndex = 0) {
             if(isPush) {
@@ -1054,6 +884,7 @@
                 if (currentView.step === 0) stateToSave.slideIndex = currentSlide;
                 historyStack.push(stateToSave);
             }
+            
             currentView = { step: step };
             if(step === 0) currentView.slideIndex = slideIndex;
 
@@ -1066,6 +897,7 @@
                 target.style.display = 'block';
                 setTimeout(() => target.classList.add('active'), 10);
             }
+            
             if(step !== 0) window.scrollTo({top: 0, behavior: 'auto'});
 
             if(step === 0) { enterHeroPageMode(slideIndex); }
@@ -1073,11 +905,11 @@
             updateBreadcrumbs();
         }
 
-        // 8. Step Renderers
         function selectCategory(catKey, isPush = true) {
             if (!groupedData[catKey]) { alert("無此類別資料"); return; }
             if(isPush) pushHistory();
             enterInnerPageMode();
+
             currentView = { step: 2, catKey: catKey };
             const config = CATEGORY_CONFIG[catKey];
             document.getElementById('selected-category-name').innerText = config.name;
@@ -1100,13 +932,17 @@
         function renderStep3List(keyword, plans, isPush = true, explicitCatKey = null) {
             if(isPush) pushHistory();
             enterInnerPageMode();
+
             let catKey = explicitCatKey || currentView.catKey;
             if(!catKey) catKey = getCategoryForKeyword(keyword);
             currentView = { step: 3, catKey: catKey, kw: keyword };
+            
             document.getElementById('list-view-title').innerText = keyword;
             document.getElementById('list-count').innerText = plans.length;
+            
             const backBtn = document.getElementById('btn-back-step3');
             backBtn.innerText = '← 回上一頁';
+
             const container = document.getElementById('plan-list-container');
             container.innerHTML = '';
             plans.forEach(plan => {
@@ -1145,6 +981,7 @@
                 col.querySelector('.plan-block').onclick = () => renderStep4(plan);
                 container.appendChild(col);
             });
+
             switchSection(3);
             updateBreadcrumbs();
         }
@@ -1152,14 +989,18 @@
         function renderStep4(plan, isPush = true) {
             if(isPush) pushHistory();
             enterInnerPageMode();
+
             currentView = { step: 4, catKey: currentView.catKey, kw: currentView.kw, plan: plan };
+            
             document.getElementById('d-agency').innerText = plan.agency;
             document.getElementById('d-title').innerText = plan.title;
             document.getElementById('d-amount').innerText = plan.amount;
+
             const outcomeText = document.getElementById('d-outcome-text');
             const outcomeToggle = document.getElementById('d-outcome-toggle');
             outcomeText.classList.remove('expanded'); outcomeText.classList.add('collapsed');
             outcomeToggle.innerText = '▼ 展開完整內容';
+            
             if (plan.outcome && plan.outcome.length > 0) {
                 outcomeText.innerText = plan.outcome;
                 if(plan.outcome.length < 60) {
@@ -1171,6 +1012,7 @@
                 outcomeToggle.style.display = 'none';
                 outcomeText.classList.remove('collapsed');
             }
+            
             const cfVals = plan.cutFrozenVal.split(/[,，]/).map(s => parseInt(s.trim()) || 0);
             const cutVal = cfVals[0] || 0; const freezeVal = cfVals[1] || 0;
             let totalVal = parseInt(plan.amount.replace(/[^0-9]/g, ''));
@@ -1186,6 +1028,7 @@
                 <div class="status-seg freeze" style="width: ${freezePct}%">${freezePct > 5 ? '凍'+freezePct.toFixed(1)+'%' : ''}</div>
                 <div class="status-seg cut" style="width: ${cutPct}%">${cutPct > 5 ? '刪'+cutPct.toFixed(1)+'%' : ''}</div>
             `;
+
             const stages = plan.reviewStats.split(/[;；]/);
             const stageNames = ['委員會', '黨團協商', '院會'];
             const chartWrapper = document.getElementById('d-chart-wrapper');
@@ -1212,6 +1055,7 @@
                 `;
                 chartWrapper.appendChild(col);
             });
+
             const tbody = document.getElementById('d-details-table-body');
             tbody.innerHTML = '';
             const detailRows = plan.detailsTable.split(/[;；]/);
@@ -1222,9 +1066,11 @@
                 tr.innerHTML = `<td class="fw-bold text-primary">${cols[0]}</td><td>${cols[1] || ''}</td>`;
                 tbody.appendChild(tr);
             });
+
             const genCutDiv = document.getElementById('d-general-cut');
             if(plan.generalCut) { genCutDiv.innerText = plan.generalCut; genCutDiv.classList.remove('d-none'); } 
             else { genCutDiv.classList.add('d-none'); }
+
             const renderTags = (containerId, str, cssClass) => {
                 const container = document.getElementById(containerId);
                 container.innerHTML = '';
@@ -1240,9 +1086,36 @@
             };
             renderTags('d-legis-cut', plan.legisCut, 'cut');
             renderTags('d-legis-freeze', plan.legisFreeze, 'freeze');
+            
             renderRandomKeywords('step4-random-keywords');
             switchSection(4);
             updateBreadcrumbs();
+        }
+
+        function switchSection(stepNum) {
+            document.querySelectorAll('.step-section').forEach(el => {
+                el.classList.remove('active');
+                setTimeout(() => { if(!el.classList.contains('active')) el.style.display = 'none'; }, 500);
+            });
+            const target = document.getElementById(`step-${stepNum}`);
+            if(target) {
+                target.style.display = 'block';
+                setTimeout(() => target.classList.add('active'), 10);
+            }
+        }
+
+        function toggleOutcome() {
+            const text = document.getElementById('d-outcome-text');
+            const btn = document.getElementById('d-outcome-toggle');
+            if (text.classList.contains('collapsed')) {
+                text.classList.remove('collapsed');
+                text.classList.add('expanded');
+                btn.innerText = '▲ 收合內容';
+            } else {
+                text.classList.remove('expanded');
+                text.classList.add('collapsed');
+                btn.innerText = '▼ 展開完整內容';
+            }
         }
 
         function updateBreadcrumbs() {
@@ -1251,10 +1124,13 @@
             list.innerHTML = '';
             if(currentView.step === 0) { nav.style.display = 'none'; return; }
             nav.style.display = 'block';
+            
             let homeLi = document.createElement('li');
             homeLi.className = 'breadcrumb-item';
+            // ★★★ Breadcrumb Home link goes to last slide ★★★
             homeLi.innerHTML = '<a onclick="goToStep(0, true, 5)">首頁</a>';
             list.appendChild(homeLi);
+            
             if(currentView.step >= 1) {
                 let catLi = document.createElement('li');
                 catLi.className = 'breadcrumb-item';
@@ -1281,6 +1157,7 @@
                 }
                 list.appendChild(listLi);
             }
+
             if(currentView.step === 4) {
                 let detailLi = document.createElement('li');
                 detailLi.className = 'breadcrumb-item active';
